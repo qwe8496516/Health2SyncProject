@@ -1,0 +1,26 @@
+*** Settings ***
+Library    AppiumLibrary
+Resource   ../variables/app_config.robot
+
+*** Keywords ***
+Launch Application
+    Open Application    ${REMOTE_URL}
+    ...    platformName=${PLATFORM_NAME}
+
+Shutdown Application
+    Close Application
+
+Click Element Until Element Is Visible
+    [Arguments]    ${locator}    ${timeout}=5
+    Wait Until Element Is Visible    ${locator}    ${timeout}
+    Click Element    ${locator}
+
+Input Text Until Element Is Visible
+    [Arguments]    ${locator}    ${text}    ${timeout}=5
+    Wait Until Element Is Visible    ${locator}    ${timeout}
+    Input Text    ${locator}    ${text}
+
+Verify Element Is Visible On Page
+    [Arguments]    ${locator}    ${timeout}=5
+    Wait Until Element Is Visible    ${locator}    ${timeout}
+    Element Should Be Visible    ${locator}
