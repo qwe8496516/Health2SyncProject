@@ -4,7 +4,7 @@ This project uses Appium and Robot Framework for mobile application automation t
 
 ## Requirements
 
-- Python 3.7+
+- Python 3.12
 - Appium Desktop (includes Appium Server and Inspector)
 - Android SDK (for Android testing)
 - Xcode (for iOS testing, macOS only)
@@ -25,7 +25,7 @@ pip install -r requirements.txt
    - Appium Inspector is used for inspecting elements and getting their locators
 
 3. Install Appium Server:
-   - Download the latest version from [Appium releases](https://github.com/appium/appium/releases)
+   - Download the latest version from [Appium releases](https://github.com/appium/appium-desktop/releases)
 
 4. Configure Android SDK:
    - Install Android Studio
@@ -38,6 +38,7 @@ pip install -r requirements.txt
    - Search and install:
      - "Robot Framework Language Server" (Robot Code)
      - "Robot Framework Intellisense"
+     - "RobotCode - Robot Framework Support"
 
 ## Project Structure
 
