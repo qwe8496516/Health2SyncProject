@@ -7,7 +7,6 @@ This project uses Appium and Robot Framework for mobile application automation t
 - Python 3.12
 - Appium Desktop (includes Appium Server and Inspector)
 - Android SDK (for Android testing)
-- Xcode (for iOS testing, macOS only)
 - VS Code Extensions:
   - Robot Framework Language Server (Robot Code)
   - Robot Framework Intellisense
@@ -30,7 +29,6 @@ pip install -r requirements.txt
 4. Configure Android SDK:
    - Install Android Studio
    - Set up ANDROID_HOME & JAVA_HOME environment variable In Appium Server
-   - Add platform-tools to your PATH
 
 5. Install VS Code Extensions:
    - Open VS Code
