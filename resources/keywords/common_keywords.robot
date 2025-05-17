@@ -17,8 +17,14 @@ Click Element Until Element Is Visible
 
 Input Text Until Element Is Visible
     [Arguments]    ${locator}    ${text}    ${timeout}=5
-    Wait Until Element Is Visible    ${locator}    ${timeout}
+    Wait Until Element Is Visible    ${locator}    ${timeout} 
     Input Text    ${locator}    ${text}
+
+Verify Text Element Is Equal To Expected Value  
+    [Arguments]    ${locator}    ${expectedValue}    ${timeout}=5
+    Wait Until Element Is Visible    ${locator}    ${timeout} 
+    ${value}=    Get Text    ${locator}
+    Should Be Equal    ${value}    ${expectedValue}
 
 Verify Element Is Visible On Page
     [Arguments]    ${locator}    ${timeout}=5
