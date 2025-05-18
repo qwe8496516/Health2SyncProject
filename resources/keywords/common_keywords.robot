@@ -6,6 +6,9 @@ Resource   ../variables/app_config.robot
 Launch Application
     Open Application    ${REMOTE_URL}
     ...    platformName=${PLATFORM_NAME}
+    ...    appPackage=${APP_PACKAGE}
+    ...    appActivity=${APP_ACTIVITY}
+    ...    noReset=true
 
 Shutdown Application
     Close Application
