@@ -33,7 +33,7 @@ Click "PDF Report/Excel" Option
 Click "Send Report" Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_send_report"]
 
-Input Email
+Enter Email
     [Arguments]    ${email}
     Input Text Until Element Is Visible  xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edittext_email"]   ${email}
 
@@ -47,7 +47,7 @@ Verify Health Report Is Exported
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="android:id/message" and @text="Your data will be sent shortly."]
 
 Click "Yes" Button
-    Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1" and @text="Yes"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1" and @text="Yes"]
 
 Click "Favorite Food" Option
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_favorite_foods"]/android.view.ViewGroup
@@ -55,7 +55,7 @@ Click "Favorite Food" Option
 Click "Create New Food" Button
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/label_title" and @text="Create New Food"]
 
-Input Food Name
+Enter Food Name
     [Arguments]    ${foodName}
     Input Text Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_food_name"]    ${foodName}
 
@@ -88,3 +88,46 @@ Scroll To Bottom Of Page
 
 Click "Delete Custom Food" Button
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_delete_custom_food"]
+
+Click "Goals" Option
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_goals"]/android.view.ViewGroup
+
+Modify Daily Steps
+    [Arguments]    ${steps}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_exercise_steps"]/android.view.ViewGroup
+    Enter Daily Steps    ${steps}
+    Click "Save" Button
+
+Enter Daily Steps
+    [Arguments]    ${steps}
+    Input Text Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_text_value"]    ${steps}
+
+Click "Save" Button
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_save"]
+
+Modify Weekly Exercise Time
+    [Arguments]    ${time}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_exercise_minutes"]/android.view.ViewGroup
+    Enter Weekly Exercise Time    ${time}
+    Click "Save" Button
+
+Enter Weekly Exercise Time
+    [Arguments]    ${time}
+    Input Text Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_text_value"]    ${time}
+
+Verify Daily Steps Goal Is Changed
+    [Arguments]    ${steps}
+    Click "Goals" Option
+    Scroll To Bottom Of Page
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value" and @text="${steps}"]
+
+Verify Weekly Exercise Time Goal Is Changed
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value" and @text="${time}"]
+
+Change Daily Steps And Weekly Exercise Time To Original Value
+    Click "Goals" Option
+    Scroll To Bottom Of Page
+    Modify Daily Steps    7500
+    Modify Weekly Exercise Time    150
+    Click "Confirm" Button

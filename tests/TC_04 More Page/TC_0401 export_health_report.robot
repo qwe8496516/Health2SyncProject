@@ -10,7 +10,7 @@ Verify Health Report Can Be Exported
     [Documentation]    Verify Health Report Can Be Exported
     Click "PDF Report/Excel" Option
     Click "Send Report" Button
-    Input Email    noceur58@gmail.com
+    Enter Email    noceur58@gmail.com
     Click "Send" Button
     Click "Confirm" Button
     Verify Health Report Is Exported

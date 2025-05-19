@@ -10,7 +10,7 @@ Verify New Food Can Be Created In "Favorite Food"
     [Documentation]    Verify New Food Can Be Created In "Favorite Food"
     Click "Favorite Food" Option
     Click "Create New Food" Button
-    Input Food Name    Hamburger
+    Enter Food Name    Hamburger
     Click "Create" Button
     Verify Favorite Food Is Created    Hamburger
     [Teardown]    Delete Favorite Food    Hamburger
