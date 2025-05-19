@@ -7,6 +7,8 @@ Suite Teardown    Shutdown Application
 *** Test Cases ***
 Verify User Can Modify Exercise Target
     [Documentation]    Exercise Target Can Be Successfully Modified And Displayed
-    # [Setup]    Create Glucose Diary    121
-    # Verify Glucose Diary Is Correct    121
-    # [Teardown]    Delete Glucose Diary
+    Click Dashboard Section     steps
+    Click Dashboard Setting Button
+    Enter Daily Steps Target    10000
+    Click Save Button
+    Verify Text Element Is Equal To Expected Value  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_exercise_steps"]  10000

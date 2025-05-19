@@ -7,6 +7,7 @@ Suite Teardown    Shutdown Application
 *** Test Cases ***
 Verify User Can Modify Steps Target
     [Documentation]    Steps Target Can Be Successfully Modified And Displayed
-    # [Setup]    Create Glucose Diary    121
-    # Verify Glucose Diary Is Correct    121
-    # [Teardown]    Delete Glucose Diary
+    Click Dashboard Menu
+    Click Dashboard Section    steps
+    Change Daily Steps Target    10000
+    Verify Steps Target Is Equal To Expected Value    10000

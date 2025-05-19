@@ -23,6 +23,12 @@ Input Text Until Element Is Visible
     Wait Until Element Is Visible    ${locator}    ${timeout} 
     Input Text    ${locator}    ${text}
 
+Get Text Until Element Is Visible
+    [Arguments]    ${locator}    ${timeout}=5
+    Wait Until Element Is Visible    ${locator}    ${timeout}
+    ${value} =    Get Text    ${locator}
+    [Return]    ${value}
+
 Scroll Until Element Is Visible
     [Arguments]    ${locator}    ${timeout}=5
     Scroll Element Into View    ${locator}
@@ -31,8 +37,7 @@ Scroll Until Element Is Visible
 
 Verify Text Element Is Equal To Expected Value  
     [Arguments]    ${locator}    ${expectedValue}    ${timeout}=5
-    Wait Until Element Is Visible    ${locator}    ${timeout} 
-    ${value}=    Get Text    ${locator}
+    ${value} =    Get Text Until Element Is Visible    ${locator}    ${timeout}
     Should Be Equal    ${value}    ${expectedValue}
 
 Verify Element Is Visible On Page
