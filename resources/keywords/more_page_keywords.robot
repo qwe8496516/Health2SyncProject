@@ -41,7 +41,8 @@ Click "Send" Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/send_report"]
 
 Click "Confirm" Button
-    Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="android:id/button1" and @text="Confirm"]
+    ${status}=    Run Keyword And Return Status    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1" and @text="Confirm"]
+    Run Keyword If    not ${status}    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
 
 Verify Health Report Is Exported
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="android:id/message" and @text="Your data will be sent shortly."]
@@ -126,8 +127,138 @@ Verify Weekly Exercise Time Goal Is Changed
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value" and @text="${time}"]
 
 Change Daily Steps And Weekly Exercise Time To Original Value
-    Click "Goals" Option
-    Scroll To Bottom Of Page
     Modify Daily Steps    7500
     Modify Weekly Exercise Time    150
     Click "Confirm" Button
+
+Click "Daily Routine" Option
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_daily_routine"]/android.view.ViewGroup
+
+Increase Time Slider By 1 Hour
+    # These coordinates are based on the bounds [0,0][1080,2400]
+    ${start_x}=    Set Variable    438         # Current hour x position
+    ${start_y}=    Set Variable    1980        # Current hour y position
+    ${end_x}=      Set Variable    540         # Same x (vertical swipe)
+    ${end_y}=      Set Variable    1820        # Slide by 1 hour to the top
+    Swipe    ${start_x}    ${start_y}    ${end_x}    ${end_y}    800
+
+Decrease Time Slider By 1 Hour
+    # These coordinates are based on the bounds [0,0][1080,2400]
+    ${start_x}=    Set Variable    438         # Current hour x position
+    ${start_y}=    Set Variable    1980        # Current hour y position
+    ${end_x}=      Set Variable    540         # Same x (vertical swipe)
+    ${end_y}=      Set Variable    2140        # Slide by 1 hour to the bottom
+    Swipe    ${start_x}    ${start_y}    ${end_x}    ${end_y}    800
+
+Increase Wake Up Routine By 1 Hour
+    Click "Wake Up" Option
+    Increase Time Slider By 1 Hour
+    Click "Done" Button
+
+Click "Wake Up" Option
+    Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_wake_up"]/android.widget.LinearLayout
+
+Click "Done" Button
+    ${status}=    Run Keyword And Return Status    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right" and @text="Done"]
+    Run Keyword If    not ${status}    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
+
+Increase Breakfast Routine By 1 Hour
+    Click "Breakfast" Option
+    Increase Time Slider By 1 Hour
+    Click "Done" Button
+
+Click "Breakfast" Option
+    Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_breakfast"]/android.widget.LinearLayout
+
+Increase Lunch Routine By 1 Hour
+    Click "Lunch" Option
+    Increase Time Slider By 1 Hour
+    Click "Done" Button
+
+Click "Lunch" Option
+    Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_lunch"]/android.widget.LinearLayout
+
+Increase Dinner Routine By 1 Hour
+    Click "Dinner" Option
+    Increase Time Slider By 1 Hour
+    Click "Done" Button
+
+Click "Dinner" Option
+    Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_dinner"]/android.widget.LinearLayout
+
+Increase Bed Time Routine By 1 Hour
+    Click "Bed Time" Option
+    Increase Time Slider By 1 Hour
+    Click "Done" Button
+
+Click "Bed Time" Option
+    Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_bed"]/android.widget.LinearLayout
+
+Increase Every Daily Routine By 1 Hour
+    Increase Wake Up Routine By 1 Hour
+    Increase Breakfast Routine By 1 Hour
+    Increase Lunch Routine By 1 Hour
+    Increase Dinner Routine By 1 Hour
+    Increase Bed Time Routine By 1 Hour
+    Click "Done" Button
+
+Verify Daily Routines Are Modified
+    Click "Daily Routine" Option
+    Wake Up Routine Should Be    08:00
+    Breakfast Routine Should Be    09:00
+    Lunch Routine Should Be    13:00
+    Dinner Routine Should Be    19:00
+    Bed Time Routine Should Be    23:00
+
+Wake Up Routine Should Be
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_wake_up"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Breakfast Routine Should Be
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_breakfast"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Lunch Routine Should Be
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_lunch"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Dinner Routine Should Be
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_dinner"]/android.widget.LinearLayout//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Bed Time Routine Should Be
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_bed"]/android.widget.LinearLayout//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Decrease Wake Up Routine By 1 Hour
+    Click "Wake Up" Option
+    Decrease Time Slider By 1 Hour
+    Click "Done" Button
+
+Decrease Breakfast Routine By 1 Hour
+    Click "Breakfast" Option
+    Decrease Time Slider By 1 Hour
+    Click "Done" Button
+
+Decrease Lunch Routine By 1 Hour
+    Click "Lunch" Option
+    Decrease Time Slider By 1 Hour
+    Click "Done" Button
+
+Decrease Dinner Routine By 1 Hour
+    Click "Dinner" Option
+    Decrease Time Slider By 1 Hour
+    Click "Done" Button
+
+Decrease Bed Time Routine By 1 Hour
+    Click "Bed Time" Option
+    Decrease Time Slider By 1 Hour
+    Click "Done" Button
+
+Decrease Every Daily Routine By 1 Hour
+    Decrease Wake Up Routine By 1 Hour
+    Decrease Breakfast Routine By 1 Hour
+    Decrease Lunch Routine By 1 Hour
+    Decrease Dinner Routine By 1 Hour
+    Decrease Bed Time Routine By 1 Hour
+    Click "Done" Button
