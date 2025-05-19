@@ -23,6 +23,12 @@ Input Text Until Element Is Visible
     Wait Until Element Is Visible    ${locator}    ${timeout} 
     Input Text    ${locator}    ${text}
 
+Scroll Until Element Is Visible
+    [Arguments]    ${locator}    ${timeout}=5
+    Scroll Element Into View    ${locator}
+    Wait Until Element Is Visible    ${locator}    timeout=${timeout}s
+    Element Should Be Visible    ${locator}
+
 Verify Text Element Is Equal To Expected Value  
     [Arguments]    ${locator}    ${expectedValue}    ${timeout}=5
     Wait Until Element Is Visible    ${locator}    ${timeout} 
