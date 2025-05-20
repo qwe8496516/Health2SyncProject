@@ -1,0 +1,12 @@
+*** Settings ***
+Resource         ../../resources/keywords/diary_page_keywords.robot
+
+Suite Setup    Launch Application
+Suite Teardown    Shutdown Application
+
+*** Test Cases ***
+Verify Diary Page Loads Successfully
+    [Documentation]
+    Click Diary Menu
+    Verify On Diary Page
+    [Teardown]
