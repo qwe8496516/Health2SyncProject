@@ -33,6 +33,37 @@ Verify Glucose Diary Is Correct
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Glucose
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${bloodGlucose} mg/dL
 
+Click Exercise Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_exercise"]
+
+Select Jogging Checkbox
+    Click Element Until Element Is Visible    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_exercise" and @text="Jogging"]
+
+Swipe Add 5 Minutes In Exercise
+    Sleep    1s
+    Swipe    674    2131    674    1981    800
+
+Confirm Time In Exercise
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
+
+Create Execise Diary
+    Click Add Diary Menu
+    Click Exercise Diary
+    Select Jogging Checkbox
+    Swipe Add 5 Minutes In Exercise
+    Confirm Time In Exercise
+    Click Done Button
+
+Clear Exercise time
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_exercise_duration"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_left"]
+
+Delete Exercise Diary
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    Clear Exercise time
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+
 Create Diary Entry Guide
     Click Add Diary Menu
     Click Add Diary Entry Guide Button
