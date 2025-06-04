@@ -8,9 +8,11 @@ Suite Teardown    Shutdown Application
 *** Test Cases ***
 Verify Dashboard Section Is Displayed Correctly
     [Documentation]    Dashboard Can Be Successfully Displayed
-    # undone
     Click Dashboard Menu
     FOR    ${section}    IN    @{DASHBOARD_SECTIONS}
         Scroll Until Text Element Is Visible    ${section}
+        IF    '${section}' == '${CGM_TITLE}'
+            ${section} =    Get Date With Dashboard Section Name    ${section}
+        END
         Verify Dashboard Section Is Displayed    ${section}
     END

@@ -1,5 +1,6 @@
 *** Settings ***
 Library    AppiumLibrary
+Library    DateTime
 Resource   ../keywords/common_keywords.robot
 
 *** Keywords ***
@@ -44,6 +45,12 @@ Get Dashboard Section Name
     ${dashboardName} =    Get Text Until Element Is Visible    xpath=//android.widget.TextView[@text="${dashboard}"]
     [Return]    ${dashboardName}
 
+Get Date With Dashboard Section Name
+    [Arguments]    ${dashboardName}
+    ${date} =    Get Current Date    result_format=%#m/%#d
+    ${newDashboardName} =    Set Variable    ${date} ${dashboardName}
+    [Return]    ${newDashboardName}
+
 Click Confirm Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
 
@@ -62,10 +69,10 @@ Scroll Until Text Element Is Visible
     ${width} =    Get Window Width
     ${height} =   Get Window Height   
     ${start_x} =    Evaluate    ${width} / 2
-    ${start_y} =    Evaluate    ${height} * 0.2
+    ${start_y} =    Evaluate    ${height} * 0.3
 
     WHILE    ${True}
-        ${is_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${text}"]
+        ${is_visible}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[contains(@text, '${text}')]
         Log    ${is_visible}
         IF    ${is_visible}
             BREAK

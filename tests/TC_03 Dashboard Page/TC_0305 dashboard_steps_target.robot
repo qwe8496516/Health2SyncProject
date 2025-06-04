@@ -8,6 +8,6 @@ Suite Teardown    Shutdown Application
 Verify User Can Modify Steps Target
     [Documentation]    Steps Target Can Be Successfully Modified And Displayed
     Click Dashboard Menu
-    Click Dashboard Section    steps
+    Click Dashboard Section    ${STEPS_DASHBOARD}
     Change Daily Steps Target    10000
     Verify Steps Target Is Equal To Expected Value    10000
