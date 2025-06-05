@@ -26,6 +26,7 @@ Input Text Until Element Is Visible
 Get Text Until Element Is Visible
     [Arguments]    ${locator}    ${timeout}=5
     Wait Until Element Is Visible    ${locator}    ${timeout}
+    Element Should Be Visible    ${locator}
     ${value} =    Get Text    ${locator}
     [Return]    ${value}
 
