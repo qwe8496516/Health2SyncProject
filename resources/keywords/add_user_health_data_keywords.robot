@@ -15,6 +15,9 @@ Click Pressure Diary
 Click Weight Diary
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Weight"]
 
+Click Add Medication Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Medication"]
+
 
 Click Done Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
@@ -33,6 +36,22 @@ Enter Weight
     [Arguments]     ${weight}  ${body_fat}
     Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]   ${weight}
     Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${body_fat}
+
+Enter Insulin/GLP-1 Medication Value
+    [Arguments]     ${carbs}  ${unit}
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1] 
+    Clear Text    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1] 
+    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1]    ${carbs}
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]
+    Clear Text    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]
+    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]    ${unit}  
+
+Enter Oral Medication Value
+    [Arguments]     ${tablets}
+    Wait Until Element Is Visible    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]
+    Clear Text    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]
+    Input Text    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]    ${tablets}
+
 
 
 
@@ -92,6 +111,80 @@ Choose Period
     Wait Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]    10s
     Click Element    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
 
+Choose Insulin/GLP-1 Medication
+    [Arguments]    ${medication_content}
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_select_medication"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/title" and @text="Insulin/GLP-1"]
+
+    WHILE    True
+        ${is_element_present}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]
+        Run Keyword If    '${is_element_present}' == 'True'    Run Keywords    Log    "Found target medication: ${medication_content}"    AND    Click Element    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]    AND    Exit For Loop
+        ${last_element_text}=    Get Text    xpath=(//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_medicine"]/android.widget.RelativeLayout[last()])//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication"]
+        Log    Current last element text: ${last_element_text}
+        Run Keyword If    '${last_element_text}' == 'Xultophy®'    Run Keywords    Log    "Reached the bottom of the list: Xultophy®"    AND    Exit For Loop
+        Swipe    553    2040    553    610   300
+    END
+    
+    Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."    
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+
+Choose Oral Medication
+    [Arguments]    ${medication_content}
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_select_medication"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/title" and @text="Oral"]
+
+    WHILE    True
+        ${is_element_present}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]
+        Run Keyword If    '${is_element_present}' == 'True'    Run Keywords    Log    "Found target medication: ${medication_content}"    AND    Click Element    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]    AND    Exit For Loop
+        ${last_element_text}=    Get Text    xpath=(//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_medicine"]/android.widget.RelativeLayout[last()])//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication"]
+        Log    Current last element text: ${last_element_text}
+        Run Keyword If    '${last_element_text}' == 'Vildagliptin / Metformin - 50 mg/850 mg'    Run Keywords    Log    "Reached the bottom of the list: Vildagliptin / Metformin - 50 mg/850 mg"    AND    Exit For Loop
+        Swipe    553    2040    553    610   300
+    END
+    
+    Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."    
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+
+
+
+Reset Insulin/GLP-1 Medication
+    [Arguments]    ${medication_content}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_select_medication"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/title" and @text="Insulin/GLP-1"]
+
+    WHILE    True
+        ${is_element_present}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]
+        Run Keyword If    '${is_element_present}' == 'True'    Run Keywords    Log    "Found target medication: ${medication_content}"    AND    Click Element    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]    AND    Exit For Loop
+        ${last_element_text}=    Get Text    xpath=(//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_medicine"]/android.widget.RelativeLayout[last()])//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication"]
+        Log    Current last element text: ${last_element_text}
+        Run Keyword If    '${last_element_text}' == 'Xultophy®'    Run Keywords    Log    "Reached the bottom of the list: Xultophy®"    AND    Exit For Loop
+        Swipe    553    2040    553    610   300
+    END
+
+    Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
+
+Reset Oral Medication
+    [Arguments]    ${medication_content}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_select_medication"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/title" and @text="Oral"]
+
+    WHILE    True
+        ${is_element_present}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]
+        Run Keyword If    '${is_element_present}' == 'True'    Run Keywords    Log    "Found target medication: ${medication_content}"    AND    Click Element    xpath=//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication" and @text="${medication_content}"]    AND    Exit For Loop
+        ${last_element_text}=    Get Text    xpath=(//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_medicine"]/android.widget.RelativeLayout[last()])//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication"]
+        Log    Current last element text: ${last_element_text}
+        Run Keyword If    '${last_element_text}' == 'Vildagliptin / Metformin - 50 mg/850 mg'    Run Keywords    Log    "Reached the bottom of the list: Vildagliptin / Metformin - 50 mg/850 mg"    AND    Exit For Loop
+        Swipe    553    2040    553    610   300
+    END
+
+    Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
+
 Create Glucose Diary
     [Arguments]    ${bloodGlucose}  ${time}  ${period}
     Click Add Diary Menu
@@ -118,10 +211,34 @@ Create Weight Diary
     Choose Period   ${period}
     Enter Weight     ${weight}  ${body_fat}
     Click Done Button
+
+Create Insulin/GLP-1 Medication Diary
+    [Arguments]   ${medication_content}  ${carbs}  ${unit}  ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Medication Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Choose Insulin/GLP-1 Medication    ${medication_content}
+    Enter Insulin/GLP-1 Medication Value  ${carbs}  ${unit}
+    Click Done Button
+    Reset Insulin/GLP-1 Medication  ${medication_content}
+
+Create Oral Medication Diary
+    [Arguments]   ${medication_content}  ${tablets}  ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Medication Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Choose Oral Medication    ${medication_content}
+    Enter Oral Medication Value  ${tablets}  
+    Click Done Button
+    Reset Oral Medication  ${medication_content}
+
+
     
 Delete Diary
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
-    ${is_image_visible}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
+    ${is_image_visible}=    Run Keyword And Return Status   Verify Element Is Visible On Page    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
@@ -143,6 +260,35 @@ Verify Weight Is Correct
     ${expected_value}=    Set Variable    ${weight} kg ${body_body_fat} %
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Weight & Body Fat
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
+
+
+Verify Insulin/GLP-1 Medication Is Correct
+    [Arguments]    ${medication_content}    ${carbs}    ${units}
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
+
+    ${expected_carbs_text}=    Set Variable    Carbs ${carbs} g
+    Run Keyword If    '${carbs}' != ''    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_carbs_text}"]
+   
+    ${expected_medication_text}=    Set Variable    ${medication_content}
+    Run Keyword If    '${units}' != ''    Set Test Variable    ${expected_medication_text}     ${medication_content} - ${units} units
+    Sleep  3s
+    Log To Console    Current value of unit: ${units}
+    Log To Console    Current value of expected medication text: ${expected_medication_text}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
+
+Verify Oral Medication Is Correct
+    [Arguments]    ${medication_content}    ${tablets}    
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
+   
+    ${expected_medication_text}=    Set Variable    ${medication_content}
+    Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} tablets
+    Sleep  3s
+    Log To Console    Current value of tablets: ${tablets}
+    Log To Console    Current value of expected medication text: ${expected_medication_text}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
+
+
+
 
 Click Exercise Diary
     Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_exercise"]
@@ -169,24 +315,11 @@ Clear Exercise time
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_exercise_duration"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_left"]
 
-Click Diary Table
-    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_diaries"]
-
-Select First Entries On Diary Page
-    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
-
-Click Delete Entries
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
-
-Confirm Delete Entries
-    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
-
 Delete Exercise Diary
-    Click Diary Table
-    Select First Entries On Diary Page 
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
     Clear Exercise time
-    Click Delete Entries
-    Confirm Delete Entries
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
 
 Create Diary Entry Guide
     Click Add Diary Menu
