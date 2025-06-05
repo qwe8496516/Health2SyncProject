@@ -169,11 +169,24 @@ Clear Exercise time
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_exercise_duration"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_left"]
 
-Delete Exercise Diary
+Click Diary Table
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_diaries"]
+
+Select First Entries On Diary Page
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
-    Clear Exercise time
+
+Click Delete Entries
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
+
+Confirm Delete Entries
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+
+Delete Exercise Diary
+    Click Diary Table
+    Select First Entries On Diary Page 
+    Clear Exercise time
+    Click Delete Entries
+    Confirm Delete Entries
 
 Create Diary Entry Guide
     Click Add Diary Menu
