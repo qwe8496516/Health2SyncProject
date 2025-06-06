@@ -4,8 +4,8 @@ Resource         ../../resources/keywords/add_user_health_data_keywords.robot
 Resource         ../../resources/keywords/diary_page_keywords.robot
 Resource         ./dashboard_variable.robot
 
-Suite Setup    Launch Application
-Suite Teardown    Shutdown Application
+Test Setup    Launch Application
+Test Teardown    Shutdown Application
 
 *** Test Cases ***
 Verify User Can Modify Blood Pressure Target WithIn Good Range (Partition 1)
