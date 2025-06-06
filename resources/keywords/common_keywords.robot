@@ -16,6 +16,7 @@ Shutdown Application
 Click Element Until Element Is Visible
     [Arguments]    ${locator}    ${timeout}=5
     Wait Until Element Is Visible    ${locator}    ${timeout}
+    Element Should Be Visible    ${locator}
     Click Element    ${locator}
 
 Input Text Until Element Is Visible
