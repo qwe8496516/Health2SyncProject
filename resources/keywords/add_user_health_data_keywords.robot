@@ -7,61 +7,6 @@ Resource   ../keywords/common_keywords.robot
 Click Add Diary Menu
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_add_diary"]
 
-Click Blood Glucose Diary
-    Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_blood_glucose"]
-
-Click Pressure Diary
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Pressure"]
-
-Click Weight Diary
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Weight"]
-
-Click Add Medication Diary
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Medication"]
-
-Click Add Diet Diary
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Diet"]
-
-Click Add Exercise Diary
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Exercise"]
-
-
-Click Done Button
-    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
-
-Enter Blood Glucose
-    [Arguments]    ${bloodGlucose}
-    Input Text Until Element Is Visible     xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"]    ${bloodGlucose}
-
-Enter Pressure
-    [Arguments]    ${systolic}    ${diastolic}    ${pulse}
-    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${systolic}
-    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${diastolic}
-    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[3]    ${pulse}
-    
-Enter Weight     
-    [Arguments]     ${weight}  ${body_fat}
-    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]   ${weight}
-    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${body_fat}
-
-Enter Insulin/GLP-1 Medication Value
-    [Arguments]     ${carbs}  ${unit}
-    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1] 
-    Clear Text    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1] 
-    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1]    ${carbs}
-    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]
-    Clear Text    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]
-    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]    ${unit}  
-
-Enter Oral Medication Value
-    [Arguments]     ${tablets}
-    Wait Until Element Is Visible    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]
-    Clear Text    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]
-    Input Text    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]    ${tablets}
-
-
-
-
 Choose Date
     [Arguments]    ${time}
     Wait Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_date"]    10s
@@ -118,6 +63,130 @@ Choose Period
     Wait Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]    10s
     Click Element    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
 
+Click Done Button
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+
+Delete Diary
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    ${is_image_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
+    Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+
+
+
+
+
+######################################################################  Glucose   ###################################################################### 
+Create Glucose Diary
+    [Arguments]    ${bloodGlucose}  ${time}  ${period}
+    Click Add Diary Menu
+    Click Blood Glucose Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Enter Blood Glucose    ${bloodGlucose} 
+    Click Done Button
+
+Click Blood Glucose Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_blood_glucose"]
+
+Enter Blood Glucose
+    [Arguments]    ${bloodGlucose}
+    Input Text Until Element Is Visible     xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"]    ${bloodGlucose}
+
+Verify Glucose Diary Is Correct
+    [Arguments]    ${bloodGlucose}
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Glucose
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${bloodGlucose} mg/dL
+
+
+
+
+
+######################################################################  Pressure   ###################################################################### 
+Create Pressure Diary
+    [Arguments]    ${systolic}  ${diastolic}   ${pulse}  ${time}  ${period}
+    Click Add Diary Menu
+    Click Pressure Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Enter Pressure     ${systolic}  ${diastolic}  ${pulse}
+    Click Done Button
+
+Click Pressure Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Pressure"]
+
+Enter Pressure
+    [Arguments]    ${systolic}    ${diastolic}    ${pulse}
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${systolic}
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${diastolic}
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[3]    ${pulse}
+
+Verify Pressure Is Correct
+    [Arguments]    ${systolic}    ${diastolic}    ${pulse}    
+    ${expected_value}=    Set Variable    ${systolic}/${diastolic} mmHg ${pulse} bpm
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Pressure & Pulse
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
+
+
+
+
+
+######################################################################  Weight   ###################################################################### 
+Create Weight Diary 
+    [Arguments]    ${weight}  ${body_fat}   ${time}  ${period}
+    Click Add Diary Menu
+    Click Weight Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Enter Weight     ${weight}  ${body_fat}
+    Click Done Button
+
+Click Weight Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Weight"]
+
+Enter Weight     
+    [Arguments]     ${weight}  ${body_fat}
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]   ${weight}
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${body_fat}
+
+Verify Weight Is Correct
+    [Arguments]    ${weight}    ${body_body_fat}
+    ${expected_value}=    Set Variable    ${weight} kg ${body_body_fat} %
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Weight & Body Fat
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
+
+
+
+
+
+######################################################################  Medication   ###################################################################### 
+Create Insulin/GLP-1 Medication Diary
+    [Arguments]   ${medication_content}  ${carbs}  ${unit}  ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Medication Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Choose Insulin/GLP-1 Medication    ${medication_content}
+    Enter Insulin/GLP-1 Medication Value  ${carbs}  ${unit}
+    Click Done Button
+    Reset Insulin/GLP-1 Medication  ${medication_content}
+
+
+Create Oral Medication Diary
+    [Arguments]   ${medication_content}  ${tablets}  ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Medication Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Choose Oral Medication    ${medication_content}
+    Enter Oral Medication Value  ${tablets}  
+    Click Done Button
+    Reset Oral Medication  ${medication_content}
+
+Click Add Medication Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Medication"]
+
 Choose Insulin/GLP-1 Medication
     [Arguments]    ${medication_content}
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_select_medication"]
@@ -152,39 +221,20 @@ Choose Oral Medication
     Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."    
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
 
-Choose Exercise
-    [Arguments]    ${exercise_name}
+Enter Insulin/GLP-1 Medication Value
+    [Arguments]     ${carbs}  ${unit}
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1] 
+    Clear Text    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1] 
+    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1]    ${carbs}
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]
+    Clear Text    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]
+    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]    ${unit}  
 
-    Click Element Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_edit_current"]
-    WHILE    True
-        # 檢查是否存在與參數一致的運動名稱
-        ${is_element_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="${exercise_name}"]    3s
-        
-        # 如果找到目標運動名稱，點擊對應的容器並退出迴圈
-        Run Keyword If    '${is_element_present}' == 'True'    
-        ...    Run Keywords    Log    "Found exercise target: ${exercise_name}"    
-        ...    AND    Click Element    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="${exercise_name}"]/ancestor::android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/exercise_option_container"])    
-        ...    AND    Exit For Loop
-
-        # 檢查是否到達列表底部的條件
-        ${is_bottom_reached}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="Biking (Fast)"]    3s
-        Run Keyword If    '${is_bottom_reached}' == 'True'    
-        ...    Run Keywords    Log    "Reached the bottom of the list: Biking (Fast), but target not found."    
-        ...    AND    Fail    Exercise '${exercise_name}' not found in the list.
-
-        # 滑動頁面
-        Swipe    553    2040    553    610    300
-
-    END
-
-    # 如果找不到目標運動名稱，記錄錯誤日誌
-    Run Keyword If    '${is_element_present}' == 'False'    
-    ...    Log    "Target exercise not found: ${exercise_name}, exiting process."    
-    ...    Fail    Exercise '${exercise_name}' not found.
-
-
-
-
+Enter Oral Medication Value
+    [Arguments]     ${tablets}
+    Wait Until Element Is Visible    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]
+    Clear Text    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]
+    Input Text    //android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"]    ${tablets}
 
 Reset Insulin/GLP-1 Medication
     [Arguments]    ${medication_content}
@@ -224,56 +274,33 @@ Reset Oral Medication
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
 
-Create Glucose Diary
-    [Arguments]    ${bloodGlucose}  ${time}  ${period}
-    Click Add Diary Menu
-    Click Blood Glucose Diary
-    Choose Date   ${time}
-    Choose Period   ${period}
-    Enter Blood Glucose    ${bloodGlucose} 
-    Click Done Button
+Verify Insulin/GLP-1 Medication Is Correct
+    [Arguments]    ${medication_content}    ${carbs}    ${units}
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
 
-Create Pressure Diary
-    [Arguments]    ${systolic}  ${diastolic}   ${pulse}  ${time}  ${period}
-    Click Add Diary Menu
-    Click Pressure Diary
-    Choose Date   ${time}
-    Choose Period   ${period}
-    Enter Pressure     ${systolic}  ${diastolic}  ${pulse}
-    Click Done Button
+    ${expected_carbs_text}=    Set Variable    Carbs ${carbs} g
+    Run Keyword If    '${carbs}' != ''    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_carbs_text}"]
+   
+    ${expected_medication_text}=    Set Variable    ${medication_content}
+    Run Keyword If    '${units}' != ''    Set Test Variable    ${expected_medication_text}     ${medication_content} - ${units} units
+    Sleep  3s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
-Create Weight Diary 
-    [Arguments]    ${weight}  ${body_fat}   ${time}  ${period}
-    Click Add Diary Menu
-    Click Weight Diary
-    Choose Date   ${time}
-    Choose Period   ${period}
-    Enter Weight     ${weight}  ${body_fat}
-    Click Done Button
-
-Create Insulin/GLP-1 Medication Diary
-    [Arguments]   ${medication_content}  ${carbs}  ${unit}  ${time}  ${period}
-    Click Add Diary Menu
-    Click Add Medication Diary
-    Choose Date   ${time}
-    Choose Period   ${period}
-    Choose Insulin/GLP-1 Medication    ${medication_content}
-    Enter Insulin/GLP-1 Medication Value  ${carbs}  ${unit}
-    Click Done Button
-    Reset Insulin/GLP-1 Medication  ${medication_content}
-
-Create Oral Medication Diary
-    [Arguments]   ${medication_content}  ${tablets}  ${time}  ${period}
-    Click Add Diary Menu
-    Click Add Medication Diary
-    Choose Date   ${time}
-    Choose Period   ${period}
-    Choose Oral Medication    ${medication_content}
-    Enter Oral Medication Value  ${tablets}  
-    Click Done Button
-    Reset Oral Medication  ${medication_content}
+Verify Oral Medication Is Correct
+    [Arguments]    ${medication_content}    ${tablets}    
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
+   
+    ${expected_medication_text}=    Set Variable    ${medication_content}
+    Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} tablets
+    Sleep  3s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
 
+
+
+
+
+######################################################################  Diet   ###################################################################### 
 Create Diet Diary
     [Arguments]    ${entries}   ${time}  ${period}
     Click Add Diary Menu
@@ -283,14 +310,8 @@ Create Diet Diary
     Add Foods    ${entries} 
     Click Done Button
 
-Create Exercise Diary
-    [Arguments]    ${entries}   ${time}  ${period}
-    Click Add Diary Menu
-    Click Add Exercise Diary
-    Choose Date   ${time}
-    Choose Period   ${period}
-    Add Exercise    ${entries} 
-    # Click Done Button
+Click Add Diet Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Diet"]
 
 Add Foods
     [Arguments]    ${entries}
@@ -319,7 +340,6 @@ Add Foods
     END
 
     Click Element    //android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
-
 
 Get Food Index
     [Arguments]    ${food_name}
@@ -356,7 +376,6 @@ Get Food Index
 
     [Return]    ${index}
 
-
 Swipe To Set Diet Serving Value
     [Arguments]    ${input_index}    ${target_value}
     [Documentation]    向上滑動設置指定的數值
@@ -384,100 +403,6 @@ Swipe To Set Diet Serving Value
         ${current_value}=    Convert To Integer    ${current_value}
         Sleep    0.5s
     END
-
-
-
-Add Exercise
-    [Arguments]    ${entries}
-
-    Log to Console  ${entries}
-
-    FOR    ${entry}    IN    @{entries}
-        ${type}=    Get From Dictionary    ${entry}    type
-        ${hour}=        Get From Dictionary    ${entry}    hour
-        ${minute}=        Get From Dictionary    ${entry}    minute
-
-        Choose Exercise  ${type}
-        Swipe To Set Exercise Time    1    ${hour}
-        Swipe To Set Exercise Time    2    ${minute}
-        Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
-        Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
-    END
-
-    Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
-
-
-Swipe To Set Exercise Time
-    [Arguments]    ${input_index}    ${target_value}
-    [Documentation]    向上滑動設置指定的數值
-
-    # 等待目標元素可見
-    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
-    ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
-    
-
-    # 使用 WHILE 進行迴圈
-    WHILE    ${current_value} != ${target_value}
-        # 根據索引值決定滑動操作
-        Run Keyword If    ${input_index} == 1    Swipe    435    1823    435    1673    300
-        Run Keyword If    ${input_index} == 2   Swipe    645    1823    645    1673    300
-
-        # 更新當前值
-        ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
-        
-        Sleep    0.5s
-    END
-
-    
-
-    
-Delete Diary
-    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
-    ${is_image_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
-    Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
-    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
-    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
-
-Verify Glucose Diary Is Correct
-    [Arguments]    ${bloodGlucose}
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Glucose
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${bloodGlucose} mg/dL
-
-Verify Pressure Is Correct
-    [Arguments]    ${systolic}    ${diastolic}    ${pulse}    
-    ${expected_value}=    Set Variable    ${systolic}/${diastolic} mmHg ${pulse} bpm
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Pressure & Pulse
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
-    
-Verify Weight Is Correct
-    [Arguments]    ${weight}    ${body_body_fat}
-    ${expected_value}=    Set Variable    ${weight} kg ${body_body_fat} %
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Weight & Body Fat
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
-
-
-Verify Insulin/GLP-1 Medication Is Correct
-    [Arguments]    ${medication_content}    ${carbs}    ${units}
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
-
-    ${expected_carbs_text}=    Set Variable    Carbs ${carbs} g
-    Run Keyword If    '${carbs}' != ''    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_carbs_text}"]
-   
-    ${expected_medication_text}=    Set Variable    ${medication_content}
-    Run Keyword If    '${units}' != ''    Set Test Variable    ${expected_medication_text}     ${medication_content} - ${units} units
-    Sleep  3s
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
-
-Verify Oral Medication Is Correct
-    [Arguments]    ${medication_content}    ${tablets}    
-    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
-   
-    ${expected_medication_text}=    Set Variable    ${medication_content}
-    Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} tablets
-    Sleep  3s
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
-
-
 
 Verify Diet Is Correct
     [Arguments]    ${entries}
@@ -564,6 +489,91 @@ Verify Diet Is Correct
     ${expected_total_text}=    Set Variable    ${total_calories} Cal / ${total_carbs} g of carbs
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_total_text}"]
 
+
+
+
+
+######################################################################  Exercise   ###################################################################### 
+Create Exercise Diary
+    [Arguments]    ${entries}   ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Exercise Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Add Exercise    ${entries} 
+    Click Done Button
+
+Click Add Exercise Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Exercise"]
+
+Add Exercise
+    [Arguments]    ${entries}
+
+    Log to Console  ${entries}
+
+    FOR    ${entry}    IN    @{entries}
+        ${type}=    Get From Dictionary    ${entry}    type
+        ${hour}=        Get From Dictionary    ${entry}    hour
+        ${minute}=        Get From Dictionary    ${entry}    minute
+
+        Choose Exercise  ${type}
+        Swipe To Set Exercise Time    1    ${hour}
+        Swipe To Set Exercise Time    2    ${minute}
+        Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
+        Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+    END
+
+Choose Exercise
+    [Arguments]    ${exercise_name}
+
+    Click Element Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_edit_current"]
+    WHILE    True
+        # 檢查是否存在與參數一致的運動名稱
+        ${is_element_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="${exercise_name}"]    3s
+        
+        # 如果找到目標運動名稱，點擊對應的容器並退出迴圈
+        Run Keyword If    '${is_element_present}' == 'True'    
+        ...    Run Keywords    Log    "Found exercise target: ${exercise_name}"    
+        ...    AND    Click Element    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="${exercise_name}"]/ancestor::android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/exercise_option_container"])    
+        ...    AND    Exit For Loop
+
+        # 檢查是否到達列表底部的條件
+        ${is_bottom_reached}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="Biking (Fast)"]    3s
+        Run Keyword If    '${is_bottom_reached}' == 'True'    
+        ...    Run Keywords    Log    "Reached the bottom of the list: Biking (Fast), but target not found."    
+        ...    AND    Fail    Exercise '${exercise_name}' not found in the list.
+
+        # 滑動頁面
+        Swipe    553    2040    553    610    300
+
+    END
+
+    # 如果找不到目標運動名稱，記錄錯誤日誌
+    Run Keyword If    '${is_element_present}' == 'False'    
+    ...    Log    "Target exercise not found: ${exercise_name}, exiting process."    
+    ...    Fail    Exercise '${exercise_name}' not found.
+
+Swipe To Set Exercise Time
+    [Arguments]    ${input_index}    ${target_value}
+    [Documentation]    向上滑動設置指定的數值
+
+    # 等待目標元素可見
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+    ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+    
+
+    # 使用 WHILE 進行迴圈
+    WHILE    ${current_value} != ${target_value}
+        # 根據索引值決定滑動操作
+        Run Keyword If    ${input_index} == 1    Swipe    435    1823    435    1673    300
+        Run Keyword If    ${input_index} == 2   Swipe    645    1823    645    1673    300
+
+        # 更新當前值
+        ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+        
+        Sleep    0.5s
+    END
+
 Verify Exercise Is Correct
     [Arguments]    ${entries}
 
@@ -596,6 +606,9 @@ Verify Exercise Is Correct
 
 
 
+
+
+######################################################################  Other   ###################################################################### 
 Click Exercise Diary
     Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_exercise"]
 
