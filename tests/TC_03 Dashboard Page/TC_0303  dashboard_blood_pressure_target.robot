@@ -7,15 +7,14 @@ Resource         ./dashboard_variable.robot
 Test Setup    Run Keywords    Launch Application
 ...                    AND    Create Pressure Diary    ${PRESSURE_DIARY}[systolic]    ${PRESSURE_DIARY}[diastolic]    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[time]    ${PRESSURE_DIARY}[period]
 
-Test Teardown    Run Keywords    Click Back Image Button
-...                       AND    Click Diary Menu
+Test Teardown    Run Keywords    Click Diary Menu
 ...                       AND    Delete Diary
 ...                       AND    Click Diary Menu
 ...                       AND    Shutdown Application
 
 *** Test Cases ***
-Verify User Can Modify Blood Pressure Target WithIn Good Range (Partition 1)
-    [Documentation]    Blood Pressure Target Can Be Successfully Modified And Displayed With Good
+Verify User Can Modify Blood Pressure Target WithIn Good Range
+    [Documentation]    Blood Pressure Target Can Be Successfully Modified And Displayed With Good (Partition 1)
     Click Dashboard Menu
     Click Pressure Dashboard Section
     Click Dashboard Menu Setting Button
@@ -27,9 +26,10 @@ Verify User Can Modify Blood Pressure Target WithIn Good Range (Partition 1)
     Verify Pressure Diastolic Values Is Correct    ${PRESSURE_DIARY}[diastolic]    ${PRESSURE_DIARY}[diastolic]    ${PRESSURE_DIARY}[diastolic]
     Verify Distribution Is Correct    ${PRESSURE_NORMAL_GOOD_DISTRIBUTION}[good]    ${PRESSURE_NORMAL_GOOD_DISTRIBUTION}[high]    ${PRESSURE_NORMAL_GOOD_DISTRIBUTION}[low]    ${PRESSURE_NORMAL_GOOD_DISTRIBUTION}[total]
     Verify Pressure Pulse Values Is Correct    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[pulse]
+    Click Back Image Button
 
-Verify User Can Modify Blood Pressure Target WithIn High Range (Partition 1)
-    [Documentation]    Blood Pressure Target Can Be Successfully Modified And Displayed With High
+Verify User Can Modify Blood Pressure Target WithIn High Range
+    [Documentation]    Blood Pressure Target Can Be Successfully Modified And Displayed With High (Partition 1)
     Click Dashboard Menu
     Click Pressure Dashboard Section
     Click Dashboard Menu Setting Button
@@ -42,8 +42,8 @@ Verify User Can Modify Blood Pressure Target WithIn High Range (Partition 1)
     Verify Distribution Is Correct    ${PRESSURE_NORMAL_HIGH_DISTRIBUTION}[good]    ${PRESSURE_NORMAL_HIGH_DISTRIBUTION}[high]    ${PRESSURE_NORMAL_HIGH_DISTRIBUTION}[low]    ${PRESSURE_NORMAL_HIGH_DISTRIBUTION}[total]
     Verify Pressure Pulse Values Is Correct    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[pulse]
 
-Verify User Can Modify Blood Pressure Target WithIn Low Range (Partition 1)
-    [Documentation]    Blood Pressure Target Can Be Successfully Modified And Displayed With Low
+Verify User Can Modify Blood Pressure Target WithIn Low Range
+    [Documentation]    Blood Pressure Target Can Be Successfully Modified And Displayed With Low (Partition 1)
     Click Dashboard Menu
     Click Pressure Dashboard Section
     Click Dashboard Menu Setting Button
@@ -56,8 +56,8 @@ Verify User Can Modify Blood Pressure Target WithIn Low Range (Partition 1)
     Verify Distribution Is Correct    ${PRESSURE_NORMAL_LOW_DISTRIBUTION}[good]    ${PRESSURE_NORMAL_LOW_DISTRIBUTION}[high]    ${PRESSURE_NORMAL_LOW_DISTRIBUTION}[low]    ${PRESSURE_NORMAL_LOW_DISTRIBUTION}[total]
     Verify Pressure Pulse Values Is Correct    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[pulse]    ${PRESSURE_DIARY}[pulse]
 
-Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Equal To High (Partition 2)
-    [Documentation]    Blood Pressure Target Can Not Be Successfully Modified And Displayed 
+Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Equal To High 
+    [Documentation]    Blood Pressure Target Can Not Be Successfully Modified And Displayed (Partition 2)
     Click Dashboard Menu
     Click Dashboard Section    ${PRESSURE_DASHBOARD}
     Click Dashboard Menu Setting Button
@@ -72,8 +72,8 @@ Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Equal To
     Click Dialog OK Button
     Click Confirm Button
 
-Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Higher Than High (Partition 3)
-    [Documentation]    Blood Pressure Target Can Not Be Successfully Modified And Displayed 
+Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Higher Than High 
+    [Documentation]    Blood Pressure Target Can Not Be Successfully Modified And Displayed (Partition 3)
     Click Dashboard Menu
     Click Dashboard Section    ${PRESSURE_DASHBOARD}
     Click Dashboard Menu Setting Button

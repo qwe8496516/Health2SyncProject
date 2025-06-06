@@ -27,8 +27,8 @@ Verify User Can Modify Glucose Target WithIn Normal Range
     Verify Glucose Values Is Correct    ${GLUCOSE_DIARY}[glucose]    ${GLUCOSE_DIARY}[glucose]    ${GLUCOSE_DIARY}[glucose]
     Verify Distribution Is Correct    ${BLOOD_GLUCOSE_NORMAL_GOOD_DISTRIBUTION}[good]    ${BLOOD_GLUCOSE_NORMAL_GOOD_DISTRIBUTION}[high]    ${BLOOD_GLUCOSE_NORMAL_GOOD_DISTRIBUTION}[low]    ${BLOOD_GLUCOSE_NORMAL_GOOD_DISTRIBUTION}[total]
 
-Verify User Can Modify Glucose Target WithIn High Range Partition 1
-    [Documentation]    Glucose Target Can Be Successfully Modified And Displayed With High
+Verify User Can Modify Glucose Target WithIn High Range
+    [Documentation]    Glucose Target Can Be Successfully Modified And Displayed With High (Partition 1)
     Click Dashboard Menu
     Click Glucose Dashboard Section
     Click Dashboard Menu Setting Button
@@ -41,8 +41,8 @@ Verify User Can Modify Glucose Target WithIn High Range Partition 1
     Verify Glucose Values Is Correct    ${GLUCOSE_DIARY}[glucose]    ${GLUCOSE_DIARY}[glucose]    ${GLUCOSE_DIARY}[glucose]
     Verify Distribution Is Correct    ${BLOOD_GLUCOSE_NORMAL_HIGH_DISTRIBUTION}[good]    ${BLOOD_GLUCOSE_NORMAL_HIGH_DISTRIBUTION}[high]    ${BLOOD_GLUCOSE_NORMAL_HIGH_DISTRIBUTION}[low]    ${BLOOD_GLUCOSE_NORMAL_HIGH_DISTRIBUTION}[total]
 
-Verify User Can Modify Glucose Target WithIn Low Range (Partition 1)
-    [Documentation]    Glucose Target Can Be Successfully Modified And Displayed With Low
+Verify User Can Modify Glucose Target WithIn Low Range
+    [Documentation]    Glucose Target Can Be Successfully Modified And Displayed With Low (Partition 1)
     Click Dashboard Menu
     Click Glucose Dashboard Section
     Click Dashboard Menu Setting Button
@@ -55,8 +55,8 @@ Verify User Can Modify Glucose Target WithIn Low Range (Partition 1)
     Verify Glucose Values Is Correct    ${GLUCOSE_DIARY}[glucose]    ${GLUCOSE_DIARY}[glucose]    ${GLUCOSE_DIARY}[glucose]
     Verify Distribution Is Correct    ${BLOOD_GLUCOSE_NORMAL_LOW_DISTRIBUTION}[good]    ${BLOOD_GLUCOSE_NORMAL_LOW_DISTRIBUTION}[high]    ${BLOOD_GLUCOSE_NORMAL_LOW_DISTRIBUTION}[low]    ${BLOOD_GLUCOSE_NORMAL_LOW_DISTRIBUTION}[total]
 
-Verify User Can Modify Glucose Target With Invalid Range Low Equal To High (Partition 2)
-    [Documentation]    Glucose Target Can Not Be Successfully Modified And Displayed 
+Verify User Can Modify Glucose Target With Invalid Range Low Equal To High 
+    [Documentation]    Glucose Target Can Not Be Successfully Modified And Displayed (Partition 2)
     Click Dashboard Menu
     Click Glucose Dashboard Section
     Click Dashboard Menu Setting Button
@@ -73,8 +73,8 @@ Verify User Can Modify Glucose Target With Invalid Range Low Equal To High (Part
     Click Confirm Button
     Click Back Image Button
 
-Verify User Can Modify Glucose Target With Invalid Range Low Higher Than High (Partition 3)
-    [Documentation]    Glucose Target Can Not Be Successfully Modified And Displayed 
+Verify User Can Modify Glucose Target With Invalid Range Low Higher Than High 
+    [Documentation]    Glucose Target Can Not Be Successfully Modified And Displayed (Partition 3)
     Click Dashboard Menu
     Click Glucose Dashboard Section
     Click Dashboard Menu Setting Button
