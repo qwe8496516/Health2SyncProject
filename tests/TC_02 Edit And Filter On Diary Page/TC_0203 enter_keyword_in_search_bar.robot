@@ -1,6 +1,7 @@
 *** Settings ***
 Resource         ../../resources/keywords/diary_page_keywords.robot
 Resource         ../../resources/keywords/add_user_health_data_keywords.robot
+
 Suite Setup    Launch Application
 #Suite Teardown    Shutdown Application
 
