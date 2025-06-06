@@ -16,6 +16,19 @@ ${STEPS_DASHBOARD}    steps
 ${GLUCOSE_DASHBOARD}    glucose
 ${PRESSURE_DASHBOARD}    pressure
 
+# Glucose Diary
+&{GLUCOSE_DIARY}    glucose=100    time=now    period=After Snack
+
+# Glucose Partition
+&{BLOOD_GLUCOSE_GOAL_NORMAL}    low=99    high=100
+&{BLOOD_GLUCOSE_GOAL_HIGH}    low=98    high=99
+&{BLOOD_GLUCOSE_GOAL_LOW}    low=101    high=102
+&{BLOOD_GLUCOSE_GOAL_LOW_EQUAL_TO_HIGH}    low=100    high=100
+&{BLOOD_GLUCOSE_GOAL_LOW_HIGHER_THAN_HIGH}    low=101    high=100
+&{BLOOD_GLUCOSE_NORMAL_GOOD_DISTRIBUTION}    good=1    high=-    low=-    total=1
+&{BLOOD_GLUCOSE_NORMAL_HIGH_DISTRIBUTION}    good=-    high=1    low=-    total=1
+&{BLOOD_GLUCOSE_NORMAL_LOW_DISTRIBUTION}    good=-    high=-    low=1    total=1
+
 # Pressure Diary
 &{PRESSURE_DIARY}    systolic=120    diastolic=80    pulse=100    time=now    period=After Snack
 

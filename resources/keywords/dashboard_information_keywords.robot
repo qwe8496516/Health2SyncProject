@@ -6,6 +6,12 @@ Resource   ../keywords/common_keywords.robot
 *** Keywords ***
 Click Dashboard Menu
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_dashboard"]
+    WHILE    ${TRUE}
+        ${is_visible} =    Run Keyword And Return Status    Page Should Contain Element    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_dismiss"]
+        Run Keyword If    not ${is_visible}    Exit For Loop
+        Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_target"]
+        Sleep    0.5s
+    END
 
 Click Dashboard Menu Setting Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/menu_setting"]
@@ -23,7 +29,8 @@ Click Save Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_save"]
 
 Click Back Image Button
-    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/toolbar"]//android.widget.ImageButton
+    Sleep    0.5s
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/toolbar"]/android.widget.ImageButton
 
 Click Daily Steps Target Option
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_exercise_steps"]
@@ -96,7 +103,6 @@ Enter Before Meal Values
     Swipe Number Picker Lower Value    ${lower_value}
     Swipe Number Picker Higher Value    ${higher_value}
     Click Modal Done Button
-    Click Confirm Button
 
 Enter After Meal Values
     [Arguments]    ${lower_value}    ${higher_value}
