@@ -2,8 +2,8 @@
 Resource         ../../resources/keywords/dashboard_information_keywords.robot
 Resource         ./dashboard_variable.robot
 
-Suite Setup    Launch Application
-Suite Teardown    Shutdown Application
+Test Setup    Launch Application
+Test Teardown    Shutdown Application
 
 *** Test Cases ***
 Verify Dashboard Section Is Displayed Correctly
