@@ -15,4 +15,4 @@ Verify New Diet Entry Can Be Successfully Added To The Diary Page
     ${entries}=    Create List    ${entry1}    ${entry2}
     Create Diet Diary    ${entries}    current    Before Breakfast
     Verify Diet Is Correct    ${entries}
-    # [Teardown]    Delete Diary
+    [Teardown]    Delete Diary

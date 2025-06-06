@@ -22,6 +22,9 @@ Click Add Medication Diary
 Click Add Diet Diary
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Diet"]
 
+Click Add Exercise Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Exercise"]
+
 
 Click Done Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
@@ -149,6 +152,36 @@ Choose Oral Medication
     Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."    
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
 
+Choose Exercise
+    [Arguments]    ${exercise_name}
+
+    Click Element Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_edit_current"]
+    WHILE    True
+        # 檢查是否存在與參數一致的運動名稱
+        ${is_element_present}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="${exercise_name}"]    3s
+        
+        # 如果找到目標運動名稱，點擊對應的容器並退出迴圈
+        Run Keyword If    '${is_element_present}' == 'True'    
+        ...    Run Keywords    Log    "Found exercise target: ${exercise_name}"    
+        ...    AND    Click Element    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="${exercise_name}"]/ancestor::android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/exercise_option_container"])    
+        ...    AND    Exit For Loop
+
+        # 檢查是否到達列表底部的條件
+        ${is_bottom_reached}=    Run Keyword And Return Status    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_view_exercise_name" and @text="Biking (Fast)"]    3s
+        Run Keyword If    '${is_bottom_reached}' == 'True'    
+        ...    Run Keywords    Log    "Reached the bottom of the list: Biking (Fast), but target not found."    
+        ...    AND    Fail    Exercise '${exercise_name}' not found in the list.
+
+        # 滑動頁面
+        Swipe    553    2040    553    610    300
+
+    END
+
+    # 如果找不到目標運動名稱，記錄錯誤日誌
+    Run Keyword If    '${is_element_present}' == 'False'    
+    ...    Log    "Target exercise not found: ${exercise_name}, exiting process."    
+    ...    Fail    Exercise '${exercise_name}' not found.
+
 
 
 
@@ -250,6 +283,14 @@ Create Diet Diary
     Add Foods    ${entries} 
     Click Done Button
 
+Create Exercise Diary
+    [Arguments]    ${entries}   ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Exercise Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Add Exercise    ${entries} 
+    # Click Done Button
 
 Add Foods
     [Arguments]    ${entries}
@@ -345,9 +386,55 @@ Swipe To Set Diet Serving Value
     END
 
 
+
+Add Exercise
+    [Arguments]    ${entries}
+
+    Log to Console  ${entries}
+
+    FOR    ${entry}    IN    @{entries}
+        ${type}=    Get From Dictionary    ${entry}    type
+        ${hour}=        Get From Dictionary    ${entry}    hour
+        ${minute}=        Get From Dictionary    ${entry}    minute
+
+        Choose Exercise  ${type}
+        Swipe To Set Exercise Time    1    ${hour}
+        Swipe To Set Exercise Time    2    ${minute}
+        Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
+        Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+    END
+
+    Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+
+
+Swipe To Set Exercise Time
+    [Arguments]    ${input_index}    ${target_value}
+    [Documentation]    向上滑動設置指定的數值
+
+    # 等待目標元素可見
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+    ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+    
+
+    # 使用 WHILE 進行迴圈
+    WHILE    ${current_value} != ${target_value}
+        # 根據索引值決定滑動操作
+        Run Keyword If    ${input_index} == 1    Swipe    435    1823    435    1673    300
+        Run Keyword If    ${input_index} == 2   Swipe    645    1823    645    1673    300
+
+        # 更新當前值
+        ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+        
+        Sleep    0.5s
+    END
+
+    
+
     
 Delete Diary
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    ${is_image_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
+    Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
 
@@ -391,7 +478,7 @@ Verify Oral Medication Is Correct
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
 
-*** Keywords ***
+
 Verify Diet Is Correct
     [Arguments]    ${entries}
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Diet
@@ -476,6 +563,38 @@ Verify Diet Is Correct
     # 驗證總熱量與碳水是否正確顯示
     ${expected_total_text}=    Set Variable    ${total_calories} Cal / ${total_carbs} g of carbs
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_total_text}"]
+
+Verify Exercise Is Correct
+    [Arguments]    ${entries}
+
+    # 驗證標題是否正確
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Exercise
+
+    # 遍歷每個條目
+    FOR    ${entry}    IN    @{entries}
+        ${type}=    Get From Dictionary    ${entry}    type
+        ${hour}=    Get From Dictionary    ${entry}    hour
+        ${minute}=    Get From Dictionary    ${entry}    minute
+
+        # 動態構建小時部分
+        ${hour_text}=    Run Keyword If    ${hour} > 1    Set Variable    ${hour} hrs${SPACE}
+        ...    ELSE IF    ${hour} == 1    Set Variable    ${hour} hr${SPACE}
+        ...    ELSE    Set Variable    ${EMPTY}
+
+        # 動態構建分鐘部分
+        ${minute_text}=    Run Keyword If    ${minute} > 0    Set Variable    ${minute} mins
+        ...    ELSE    Set Variable    ${EMPTY}
+
+        # 動態組合最終文本，確保不會有多餘的空格
+        ${expected_text}=    Evaluate    '${type} - ${hour_text}${minute_text}'.strip()
+
+        # 驗證該格式是否存在於頁面中
+        Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_text}"]    5s
+        Log    Verified exercise entry: ${expected_text}
+
+    END
+
+
 
 Click Exercise Diary
     Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_exercise"]
