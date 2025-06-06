@@ -16,8 +16,37 @@ ${STEPS_DASHBOARD}    steps
 ${GLUCOSE_DASHBOARD}    glucose
 ${PRESSURE_DASHBOARD}    pressure
 
-# Diary Variables
-&{GLUCOSE_DIARY}    systolic=120    diastolic=80    pulse=100    time=past    period=After Snack
+# Glucose Diary
+&{GLUCOSE_DIARY}    glucose=100    time=now    period=After Snack
+
+# Glucose Partition
+&{BLOOD_GLUCOSE_GOAL_NORMAL}    low=99    high=100
+&{BLOOD_GLUCOSE_GOAL_HIGH}    low=98    high=99
+&{BLOOD_GLUCOSE_GOAL_LOW}    low=101    high=102
+&{BLOOD_GLUCOSE_GOAL_LOW_EQUAL_TO_HIGH}    low=100    high=100
+&{BLOOD_GLUCOSE_GOAL_LOW_HIGHER_THAN_HIGH}    low=101    high=100
+&{BLOOD_GLUCOSE_NORMAL_GOOD_DISTRIBUTION}    good=1    high=-    low=-    total=1
+&{BLOOD_GLUCOSE_NORMAL_HIGH_DISTRIBUTION}    good=-    high=1    low=-    total=1
+&{BLOOD_GLUCOSE_NORMAL_LOW_DISTRIBUTION}    good=-    high=-    low=1    total=1
+
+# Pressure Diary
+&{PRESSURE_DIARY}    systolic=120    diastolic=80    pulse=100    time=now    period=After Snack
+
+# Pressure Partition
+&{SYSTOLIC_GOAL_NORMAL}    low=119    high=120
+&{SYSTOLIC_GOAL_LOW_EQUAL_TO_HIGH}    low=120    high=120
+&{SYSTOLIC_GOAL_LOW_HIGHER_THAN_HIGH}    low=121    high=120
+&{DIASTOLIC_GOAL_NORMAL_GOOD}    low=79    high=80
+&{DIASTOLIC_GOAL_NORMAL_HIGH}    low=78    high=79
+&{DIASTOLIC_GOAL_NORMAL_LOW}    low=81    high=82
+&{DIASTOLIC_GOAL_LOW_EQUAL_TO_HIGH}    low=80    high=80
+&{DIASTOLIC_GOAL_LOW_HIGHER_THAN_HIGH}    low=81    high=80
+&{PULSE_GOAL_NORMAL}    low=99    high=100
+&{PULSE_GOAL_LOW_EQUAL_TO_HIGH}    low=100    high=100
+&{PULSE_GOAL_LOW_HIGHER_THAN_HIGH}    low=101    high=100
+&{PRESSURE_NORMAL_GOOD_DISTRIBUTION}    good=1    high=-    low=-    total=1
+&{PRESSURE_NORMAL_HIGH_DISTRIBUTION}    good=-    high=1    low=-    total=1
+&{PRESSURE_NORMAL_LOW_DISTRIBUTION}    good=-    high=-    low=1    total=1
 
 # Exercise Partition
 ${EXERCISE_MIN_MIN}    0

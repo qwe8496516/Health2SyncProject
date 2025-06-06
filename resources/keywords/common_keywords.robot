@@ -16,7 +16,8 @@ Shutdown Application
 Click Element Until Element Is Visible
     [Arguments]    ${locator}    ${timeout}=5
     Wait Until Element Is Visible    ${locator}    ${timeout}
-    Click Element    ${locator}
+    ${status} =    Run Keyword And Return Status    Page Should Contain Element    ${locator}
+    Run Keyword If    ${status}    Click Element    ${locator}
 
 Input Text Until Element Is Visible
     [Arguments]    ${locator}    ${text}    ${timeout}=5

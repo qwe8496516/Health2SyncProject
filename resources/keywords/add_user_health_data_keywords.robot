@@ -348,11 +348,8 @@ Swipe To Set Diet Serving Value
     
 Delete Diary
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
-    ${is_image_visible}=    Run Keyword And Return Status   Verify Element Is Visible On Page    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
-    Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
-
 
 Verify Glucose Diary Is Correct
     [Arguments]    ${bloodGlucose}
