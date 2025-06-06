@@ -1,5 +1,6 @@
 *** Settings ***
 Library    AppiumLibrary
+Library    Collections
 Resource   ../keywords/common_keywords.robot
 
 *** Keywords ***
@@ -17,6 +18,9 @@ Click Weight Diary
 
 Click Add Medication Diary
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Medication"]
+
+Click Add Diet Diary
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Diet"]
 
 
 Click Done Button
@@ -147,6 +151,8 @@ Choose Oral Medication
 
 
 
+
+
 Reset Insulin/GLP-1 Medication
     [Arguments]    ${medication_content}
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
@@ -235,6 +241,110 @@ Create Oral Medication Diary
     Reset Oral Medication  ${medication_content}
 
 
+Create Diet Diary
+    [Arguments]    ${entries}   ${time}  ${period}
+    Click Add Diary Menu
+    Click Add Diet Diary
+    Choose Date   ${time}
+    Choose Period   ${period}
+    Add Foods    ${entries} 
+    Click Done Button
+
+
+Add Foods
+    [Arguments]    ${entries}
+
+    Click Element Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_add_by_category"]
+
+    FOR    ${entry}    IN    @{entries}
+        ${category}=    Get From Dictionary    ${entry}    category
+        ${serv}=        Get From Dictionary    ${entry}    serv
+
+        ${serv_float}=    Evaluate    float(${serv})
+        Run Keyword If    not ${0.0} <= ${serv_float} <= ${19.9}    Fail    Serv value must be between 0.0 and 19.9
+
+        ${index}=    Get Food Index    ${category}
+        Click Element Until Element Is Visible    xpath=(//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_right"])[${index}]
+
+        ${integer_part}=    Evaluate    int(${serv_float})
+        ${decimal_part}=    Evaluate    int(round((${serv_float} - ${integer_part}) * 10))
+
+        Log To Console      target: ${integer_part}.${decimal_part}
+
+        Swipe To Set Diet Serving Value    1    ${integer_part}
+        Swipe To Set Diet Serving Value    2    ${decimal_part}
+
+        Click Element    //android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+    END
+
+    Click Element    //android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+
+
+Get Food Index
+    [Arguments]    ${food_name}
+    [Documentation]    根據指定的文字找到對應的 ViewGroup 索引
+
+    # 定義食物名稱與索引的映射表
+    ${food_map}=    Create Dictionary
+    ...    Bread=1
+    ...    Meat=2
+    ...    Pasta=3
+    ...    Fish=4
+    ...    Rice=5
+    ...    Seafood=6
+    ...    Starchy Veggies=7
+    ...    Eggs=8
+    ...    Other Grains=9
+    ...    Other Proteins=10
+    ...    Vegetables=11
+    ...    Fruits=12
+    ...    Dairy=13
+    ...    Oils=14
+    ...    Juice=15
+    ...    Alcohol=16
+    ...    Soft Drinks=17
+    ...    Coffee/Tea=18
+
+    # 查找指定食物名稱的索引
+    ${index}=    Get From Dictionary    ${food_map}    ${food_name}
+
+    Log To Console  category index: ${index}
+
+    # 確保找到匹配的索引，否則報錯
+    Run Keyword If    ${index} == None    Fail    Food name '${food_name}' not found.
+
+    [Return]    ${index}
+
+
+Swipe To Set Diet Serving Value
+    [Arguments]    ${input_index}    ${target_value}
+    [Documentation]    向上滑動設置指定的數值
+
+    # 等待目標元素可見
+    Wait Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+
+    # 獲取當前值並轉換為整數
+    ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+    ${current_value}=    Convert To Integer    ${current_value}
+
+    # 將目標值轉換為整數（以防傳遞的是字串）
+    ${target_value}=    Convert To Integer    ${target_value}
+
+    Log To Console      target: ${target_value}
+
+    # 使用 WHILE 進行迴圈
+    WHILE    ${current_value} != ${target_value}
+        # 根據索引值決定滑動操作
+        Run Keyword If    ${input_index} == 1    Swipe    435    1823    435    1673    300
+        Run Keyword If    ${input_index} == 2   Swipe    645    1823    645    1673    300
+
+        # 更新當前值
+        ${current_value}=    Get Text    xpath=(//android.widget.EditText[@resource-id="android:id/numberpicker_input"])[${input_index}]
+        ${current_value}=    Convert To Integer    ${current_value}
+        Sleep    0.5s
+    END
+
+
     
 Delete Diary
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
@@ -272,8 +382,6 @@ Verify Insulin/GLP-1 Medication Is Correct
     ${expected_medication_text}=    Set Variable    ${medication_content}
     Run Keyword If    '${units}' != ''    Set Test Variable    ${expected_medication_text}     ${medication_content} - ${units} units
     Sleep  3s
-    Log To Console    Current value of unit: ${units}
-    Log To Console    Current value of expected medication text: ${expected_medication_text}
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
 Verify Oral Medication Is Correct
@@ -283,12 +391,94 @@ Verify Oral Medication Is Correct
     ${expected_medication_text}=    Set Variable    ${medication_content}
     Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} tablets
     Sleep  3s
-    Log To Console    Current value of tablets: ${tablets}
-    Log To Console    Current value of expected medication text: ${expected_medication_text}
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
 
+*** Keywords ***
+Verify Diet Is Correct
+    [Arguments]    ${entries}
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Diet
 
+    # 定義卡路里表與碳水表
+    ${calories_table}=    Create Dictionary
+    ...    Bread=7
+    ...    Meat=8
+    ...    Pasta=7
+    ...    Fish=8
+    ...    Rice=7
+    ...    Seafood=8
+    ...    Starchy Veggies=7
+    ...    Eggs=8
+    ...    Other Grains=7
+    ...    Other Proteins=8
+    ...    Vegetables=3
+    ...    Fruits=6
+    ...    Dairy=12
+    ...    Oils=5
+    ...    Juice=6
+    ...    Alcohol=13
+    ...    Soft Drinks=6
+    ...    Coffee/Tea=0
+
+    ${carbs_table}=    Create Dictionary
+    ...    Bread=1.5
+    ...    Meat=0
+    ...    Pasta=1.5
+    ...    Fish=0
+    ...    Rice=1.5
+    ...    Seafood=0
+    ...    Starchy Veggies=1.5
+    ...    Eggs=0
+    ...    Other Grains=1.5
+    ...    Other Proteins=0
+    ...    Vegetables=0.5
+    ...    Fruits=1.5
+    ...    Dairy=1.2
+    ...    Oils=0
+    ...    Juice=1.5
+    ...    Alcohol=0
+    ...    Soft Drinks=1.5
+    ...    Coffee/Tea=0
+
+    # 初始化總熱量與總碳水
+    ${total_calories}=    Set Variable    0
+    ${total_carbs}=       Set Variable    0
+
+    # 遍歷每個條目
+    FOR    ${entry}    IN    @{entries}
+        ${category}=    Get From Dictionary    ${entry}    category
+        ${serv}=        Get From Dictionary    ${entry}    serv
+
+        # 從表中獲取每單位的卡路里和碳水
+        ${calories_per_unit}=    Get From Dictionary    ${calories_table}    ${category}
+        ${carbs_per_unit}=       Get From Dictionary    ${carbs_table}       ${category}
+
+        # 計算當前條目的熱量與碳水
+        ${serv_float}=    Evaluate    float(${serv})
+        ${calories}=      Evaluate    ${serv_float} * float(${calories_per_unit})
+        ${carbs}=         Evaluate    ${serv_float} * float(${carbs_per_unit})
+
+        # 更新總熱量與總碳水
+        ${total_calories}=    Evaluate    ${total_calories} + ${calories}
+        ${total_carbs}=       Evaluate    ${total_carbs} + ${carbs}
+
+        # 驗證當前條目是否正確顯示
+        ${expected_text}=    Set Variable    ${category} - ${serv} (serv.)
+        Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_text}"]
+
+    END
+
+    # 將最終結果乘以10
+    ${total_calories}=    Evaluate    ${total_calories} * 10
+    ${total_carbs}=       Evaluate    ${total_carbs} * 10
+
+    ${total_calories}=    Evaluate    round(${total_calories})
+    ${total_carbs}=       Evaluate    int(${total_carbs}) if ${total_carbs} == int(${total_carbs}) else round(${total_carbs}, 1)
+
+
+    # 驗證總熱量與碳水是否正確顯示
+    ${expected_total_text}=    Set Variable    ${total_calories} Cal / ${total_carbs} g of carbs
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_total_text}"]
 
 Click Exercise Diary
     Click Element Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_item_exercise"]
