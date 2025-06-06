@@ -59,7 +59,7 @@ Verify User Can Modify Blood Pressure Target WithIn Low Range
 Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Equal To High 
     [Documentation]    Blood Pressure Target Can Not Be Successfully Modified And Displayed (Partition 2)
     Click Dashboard Menu
-    Click Dashboard Section    ${PRESSURE_DASHBOARD}
+    Click Pressure Dashboard Section
     Click Dashboard Menu Setting Button
     Enter Systolic Values    ${SYSTOLIC_GOAL_LOW_EQUAL_TO_HIGH}[low]    ${SYSTOLIC_GOAL_LOW_EQUAL_TO_HIGH}[high]
     Verify Warning Message High End Should Be Higher Than The Low End
@@ -75,7 +75,7 @@ Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Equal To
 Verify User Can Not Modify Blood Pressure Target With Invalid Range Low Higher Than High 
     [Documentation]    Blood Pressure Target Can Not Be Successfully Modified And Displayed (Partition 3)
     Click Dashboard Menu
-    Click Dashboard Section    ${PRESSURE_DASHBOARD}
+    Click Pressure Dashboard Section
     Click Dashboard Menu Setting Button
     Enter Systolic Values    ${SYSTOLIC_GOAL_LOW_HIGHER_THAN_HIGH}[low]    ${SYSTOLIC_GOAL_LOW_HIGHER_THAN_HIGH}[high]
     Verify Warning Message High End Should Be Higher Than The Low End
