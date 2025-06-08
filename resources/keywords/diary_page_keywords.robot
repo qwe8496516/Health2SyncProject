@@ -182,3 +182,12 @@ Cancel Edit Glucose Diary Entry
     Edit Glucose Entry Value    ${value}
     Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel" and @text="Cancel"]
     Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="android:id/button1"]
+
+Reset Daily Diet Entry
+    Click Diary Menu
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title" and @text="Diet"]
+    Wait Until Element Is Visible  xpath=//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_vertical"]/android.widget.FrameLayout[2]/android.widget.FrameLayout/android.view.ViewGroup
+    Swipe Down Until Element Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="android:id/button1"]
+    Wait Until Page Contains Element    xpath=//android.widget.TextView[@text="You don’t have any diaries yet."]
