@@ -92,7 +92,7 @@ Verify Glucose Show On Table View
     Wait Until Page Contains Element    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_left"]/android.widget.TextView
     ${text}=    Get Text    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_left"]/android.widget.TextView
     Should Be Equal    ${text}    ${glucose}
-    ${text}=    Get Text    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_period"]
+    ${text}=    Get Text    xpath=//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_diary_table"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_period"]
     Should Be Equal    ${text}    ${time}
 
 Verify Pressure Show On Table View
@@ -154,3 +154,31 @@ Exit Search state on Diary Page
 Verify Entries with Keyword Shows on Diary Page
     [Arguments]    ${keywords}
     Wait Until Element Is Visible    xpath=(//android.widget.TextView[contains(@text, ${keywords})])    10s
+
+Click Edit Glucose Diary Entry
+    [Arguments]    ${value}
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title" and @text="Blood Glucose"]
+    Edit Glucose Entry Value    ${value}
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done" and @text="Done"]
+
+Edit Glucose Entry Value
+    [Arguments]    ${value}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_title" and @text="Glucose"]
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit" and @text="mg/dL"]
+    FOR    ${index}    IN RANGE    3
+        Click Element Until Element Is Visible  xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    END
+    Input Text Until Element Is Visible  xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"]    ${value}
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action" and @text="Done"]
+
+Glucose Diary Entry Value Should Be
+    [Arguments]    ${value}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title" and @text="Blood Glucose"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${value} mg/dL"]
+
+Cancel Edit Glucose Diary Entry
+    [Arguments]    ${value}
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title" and @text="Blood Glucose"]
+    Edit Glucose Entry Value    ${value}
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel" and @text="Cancel"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="android:id/button1"]
