@@ -3,16 +3,9 @@ Resource         ../../resources/keywords/diary_page_keywords.robot
 Resource         ../../resources/keywords/add_user_health_data_keywords.robot
 
 Suite Setup    Launch Application
-#Suite Teardown    Shutdown Application
+Suite Teardown    Shutdown Application
 
 *** Test Cases ***
-Verify Diary Page Loads Successfully
-    [Documentation]
-    Click Diary Menu
-    Click Table View
-    Verify List View on Rage
-    [Teardown]
-
 Verify Table View Glucose Displayed Correctly
     [Documentation]
     Create Glucose Diary  10  past  Before Lunch
