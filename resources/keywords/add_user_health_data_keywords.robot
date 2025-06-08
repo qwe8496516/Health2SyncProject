@@ -1,12 +1,15 @@
 *** Settings ***
 Library    AppiumLibrary
 Library    Collections
+Library    Math
 Resource   ../keywords/common_keywords.robot
 
 *** Keywords ***
 Click Add Diary Menu
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_add_diary"]
 
+Click Diary To Diary Menu
+    Click Element Until Element Is Visible    xpath=(//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_view"])[2]                                               
 Choose Date
     [Arguments]    ${time}
     Wait Until Element Is Visible    //android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_date"]    10s
@@ -65,17 +68,33 @@ Choose Period
 
 Click Done Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+     ${is_alert_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button2"]
+    Run Keyword If    '${is_alert_visible}' == 'True'    Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="android:id/button2"]
 
 Delete Diary
+    Click Diary To Diary Menu
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
     ${is_image_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
 
+Click Cancel Button
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
+    ${is_alert_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+    Run Keyword If    '${is_alert_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+   
 
+Click Cancel Choose Button
+    Click Element Until Element Is Visible      //android.widget.ImageButton
 
-
+Verify Alert Showing
+    [Arguments]    ${expected_message}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="android:id/message"]    timeout=5s
+    ${actual_message}=    Get Text    xpath=//android.widget.TextView[@resource-id="android:id/message"]
+    Should Be Equal As Strings    ${actual_message}    ${expected_message}
+    Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+    Click Cancel Button
 
 ######################################################################  Glucose   ###################################################################### 
 Create Glucose Diary
@@ -99,6 +118,10 @@ Verify Glucose Diary Is Correct
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Glucose
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${bloodGlucose} mg/dL
 
+Verify Glucose Diary Is Not Present
+    [Arguments]    ${bloodGlucose}
+    Click Diary To Diary Menu
+    Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${bloodGlucose} mg/dL"]    5s
 
 
 
@@ -128,6 +151,11 @@ Verify Pressure Is Correct
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Blood Pressure & Pulse
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
 
+Verify Pressure Diary Is Not Present
+    [Arguments]    ${systolic}    ${diastolic}    ${pulse} 
+    Click Diary To Diary Menu
+    ${expected_value}=    Set Variable    ${systolic}/${diastolic} mmHg ${pulse} bpm
+    Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_value}"]    5s
 
 
 
@@ -156,6 +184,11 @@ Verify Weight Is Correct
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Weight & Body Fat
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value"]    ${expected_value}
 
+Verify Weight Diary Is Not Present
+    [Arguments]    ${weight}    ${body_body_fat}
+    Click Diary To Diary Menu
+    ${expected_value}=    Set Variable    ${weight} kg ${body_body_fat} %
+    Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_value}"]    5s
 
 
 
@@ -198,7 +231,7 @@ Choose Insulin/GLP-1 Medication
         ${last_element_text}=    Get Text    xpath=(//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_medicine"]/android.widget.RelativeLayout[last()])//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication"]
         Log    Current last element text: ${last_element_text}
         Run Keyword If    '${last_element_text}' == 'Xultophy®'    Run Keywords    Log    "Reached the bottom of the list: Xultophy®"    AND    Exit For Loop
-        Swipe    553    2040    553    610   300
+        Swipe    553    2040    553    1000   300
     END
     
     Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."    
@@ -215,7 +248,7 @@ Choose Oral Medication
         ${last_element_text}=    Get Text    xpath=(//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_medicine"]/android.widget.RelativeLayout[last()])//android.widget.CheckBox[@resource-id="com.h2sync.android.h2syncapp:id/check_box_medication"]
         Log    Current last element text: ${last_element_text}
         Run Keyword If    '${last_element_text}' == 'Vildagliptin / Metformin - 50 mg/850 mg'    Run Keywords    Log    "Reached the bottom of the list: Vildagliptin / Metformin - 50 mg/850 mg"    AND    Exit For Loop
-        Swipe    553    2040    553    610   300
+        Swipe    553    2040    553   1000   300
     END
     
     Run Keyword If    '${is_element_present}' == 'False'    Log    "Target medication not found: ${medication_content}, exiting process."    
@@ -279,22 +312,48 @@ Verify Insulin/GLP-1 Medication Is Correct
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
 
     ${expected_carbs_text}=    Set Variable    Carbs ${carbs} g
-    Run Keyword If    '${carbs}' != ''    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_carbs_text}"]
+    Run Keyword If    '${carbs}' != '' and '${carbs}' != '0'   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_carbs_text}"]
    
+    ${unit_text}=    Run Keyword If    '${units}' == '1'    Set Variable    unit    ELSE    Set Variable    units
     ${expected_medication_text}=    Set Variable    ${medication_content}
-    Run Keyword If    '${units}' != ''    Set Test Variable    ${expected_medication_text}     ${medication_content} - ${units} units
+    Run Keyword If    '${units}' != '' and '${units}' != '0'    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${units} ${unit_text}
     Sleep  3s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
+
+
 
 Verify Oral Medication Is Correct
     [Arguments]    ${medication_content}    ${tablets}    
     Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
    
+    ${tablet_text}=    Run Keyword If    '${tablets}' == '1'    Set Variable    tablet    ELSE    Set Variable    tablets
     ${expected_medication_text}=    Set Variable    ${medication_content}
-    Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} tablets
+    Run Keyword If    '${tablets}' != '' and '${tablets}' != '0'    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} ${tablet_text}
     Sleep  3s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
+Verify Insulin/GLP-1 Medication Diary Is Not Present
+    [Arguments]    ${medication_content}    ${carbs}    ${units}
+    Click Diary To Diary Menu
+    ${expected_carbs_text}=    Set Variable    Carbs ${carbs} g
+    Run Keyword If    '${carbs}' != ''    Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_carbs_text}"]
+   
+    ${unit_text}=    Run Keyword If    '${units}' == '1'    Set Variable    unit    ELSE    Set Variable    units
+    ${expected_medication_text}=    Set Variable    ${medication_content}
+    Run Keyword If    '${units}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${units} ${unit_text}
+    Sleep   3s
+    Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
+
+Verify Oral Medication Diary Is Not Present
+    [Arguments]    ${medication_content}    ${tablets}
+    Click Diary To Diary Menu
+    Verify Text Element Is Equal To Expected Value    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_title"]    Medication
+   
+    ${tablet_text}=    Run Keyword If    '${tablets}' == '1'    Set Variable    tablet    ELSE    Set Variable    tablets
+    ${expected_medication_text}=    Set Variable    ${medication_content}
+    Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} ${tablet_text}
+    Sleep   3s
+    Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
 
 
 
@@ -411,21 +470,21 @@ Verify Diet Is Correct
     # 定義卡路里表與碳水表
     ${calories_table}=    Create Dictionary
     ...    Bread=7
-    ...    Meat=8
+    ...    Meat=7.5
     ...    Pasta=7
-    ...    Fish=8
+    ...    Fish=7.5
     ...    Rice=7
-    ...    Seafood=8
+    ...    Seafood=7.5
     ...    Starchy Veggies=7
-    ...    Eggs=8
+    ...    Eggs=7.5
     ...    Other Grains=7
-    ...    Other Proteins=8
-    ...    Vegetables=3
+    ...    Other Proteins=7.5
+    ...    Vegetables=2.5
     ...    Fruits=6
     ...    Dairy=12
-    ...    Oils=5
+    ...    Oils=4.5
     ...    Juice=6
-    ...    Alcohol=13
+    ...    Alcohol=12.5
     ...    Soft Drinks=6
     ...    Coffee/Tea=0
 
@@ -471,24 +530,50 @@ Verify Diet Is Correct
         ${total_calories}=    Evaluate    ${total_calories} + ${calories}
         ${total_carbs}=       Evaluate    ${total_carbs} + ${carbs}
 
+        # 處理 serv 的顯示格式（如果是 .0，則只顯示整數）
+        ${formatted_serv}=    Evaluate    int(${serv}) if float(${serv}) == int(${serv}) else ${serv}
+
         # 驗證當前條目是否正確顯示
-        ${expected_text}=    Set Variable    ${category} - ${serv} (serv.)
+        ${expected_text}=    Set Variable    ${category} - ${formatted_serv} (serv.)
         Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_text}"]
 
     END
+
 
     # 將最終結果乘以10
     ${total_calories}=    Evaluate    ${total_calories} * 10
     ${total_carbs}=       Evaluate    ${total_carbs} * 10
 
-    ${total_calories}=    Evaluate    round(${total_calories})
+    Log To Console  mutiple10:${total_calories}
+
+    ${total_calories}=    Evaluate    int(${total_calories} + 0.5)
     ${total_carbs}=       Evaluate    int(${total_carbs}) if ${total_carbs} == int(${total_carbs}) else round(${total_carbs}, 1)
 
+    # ${total_carbs}=       Evaluate    int(${total_carbs}) if ${total_carbs} == int(${total_carbs}) else round(${total_carbs} + 0.05, 1)
 
     # 驗證總熱量與碳水是否正確顯示
     ${expected_total_text}=    Set Variable    ${total_calories} Cal / ${total_carbs} g of carbs
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_total_text}"]
 
+Verify Diet Diary Is Not Present
+    [Arguments]    ${entries}
+
+    # 點擊進入日誌頁面
+    Click Diary To Diary Menu
+
+    # 遍歷每個條目
+    FOR    ${entry}    IN    @{entries}
+        ${category}=    Get From Dictionary    ${entry}    category
+        ${serv}=        Get From Dictionary    ${entry}    serv
+
+        # 動態組合預期文本
+        ${expected_text}=    Set Variable    ${category} - ${serv} (serv.)
+
+        # 驗證該格式是否不存在於頁面中
+        Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_text}"]    5s
+        Log    Verified diet entry is not present: ${expected_text}
+
+    END
 
 
 
@@ -506,6 +591,7 @@ Create Exercise Diary
 Click Add Exercise Diary
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_entry_item" and @text="Exercise"]
 
+*** Keywords ***
 Add Exercise
     [Arguments]    ${entries}
 
@@ -513,15 +599,27 @@ Add Exercise
 
     FOR    ${entry}    IN    @{entries}
         ${type}=    Get From Dictionary    ${entry}    type
-        ${hour}=        Get From Dictionary    ${entry}    hour
-        ${minute}=        Get From Dictionary    ${entry}    minute
+        ${hour}=    Get From Dictionary    ${entry}    hour
+        ${minute}=  Get From Dictionary    ${entry}    minute
+
+        # 檢查時間是否合法
+        Validate Exercise Time    ${hour}    ${minute}
 
         Choose Exercise  ${type}
         Swipe To Set Exercise Time    1    ${hour}
         Swipe To Set Exercise Time    2    ${minute}
         Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
-        Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+        Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
     END
+
+Validate Exercise Time
+    [Arguments]    ${hour}    ${minute}
+
+    # 檢查小時是否在合法範圍內
+    Run Keyword Unless    ${hour} >= 0 and ${hour} <= 9    Fail    Invalid hour value: ${hour}. Hour must be between 0 and 9.
+
+    # 檢查分鐘是否在合法範圍內且是 5 的倍數
+    Run Keyword Unless    ${minute} in [0,5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]    Fail    Invalid minute value: ${minute}. Minute must be one of [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].
 
 Choose Exercise
     [Arguments]    ${exercise_name}
@@ -552,6 +650,9 @@ Choose Exercise
     Run Keyword If    '${is_element_present}' == 'False'    
     ...    Log    "Target exercise not found: ${exercise_name}, exiting process."    
     ...    Fail    Exercise '${exercise_name}' not found.
+
+
+
 
 Swipe To Set Exercise Time
     [Arguments]    ${input_index}    ${target_value}
@@ -605,7 +706,35 @@ Verify Exercise Is Correct
     END
 
 
+Verify Exercise Diary Is Not Present
+    [Arguments]    ${entries}
 
+    # 點擊進入日誌頁面
+    Click Diary To Diary Menu
+
+    # 遍歷每個條目
+    FOR    ${entry}    IN    @{entries}
+        ${type}=    Get From Dictionary    ${entry}    type
+        ${hour}=    Get From Dictionary    ${entry}    hour
+        ${minute}=    Get From Dictionary    ${entry}    minute
+
+        # 動態構建小時部分
+        ${hour_text}=    Run Keyword If    ${hour} > 1    Set Variable    ${hour} hrs${SPACE}
+        ...    ELSE IF    ${hour} == 1    Set Variable    ${hour} hr${SPACE}
+        ...    ELSE    Set Variable    ${EMPTY}
+
+        # 動態構建分鐘部分
+        ${minute_text}=    Run Keyword If    ${minute} > 0    Set Variable    ${minute} mins
+        ...    ELSE    Set Variable    ${EMPTY}
+
+        # 動態組合最終文本，確保不會有多餘的空格
+        ${expected_text}=    Evaluate    '${type} - ${hour_text}${minute_text}'.strip()
+
+        # 驗證該格式是否不存在於頁面中
+        Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_text}"]    5s
+        Log    Verified exercise entry is not present: ${expected_text}
+
+    END
 
 
 ######################################################################  Other   ###################################################################### 
