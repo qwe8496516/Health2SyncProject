@@ -140,7 +140,7 @@ Verify Glucose Show On Table View
     Wait Until Page Contains Element    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_left"]/android.widget.TextView
     ${text}=    Get Text    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_left"]/android.widget.TextView
     Should Be Equal    ${text}    ${glucose}
-    ${text}=    Get Text    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_period"]
+    ${text}=    Get Text    xpath=//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_diary_table"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_period"]
     Should Be Equal    ${text}    ${time}
 
 Verify Pressure Show On Table View
