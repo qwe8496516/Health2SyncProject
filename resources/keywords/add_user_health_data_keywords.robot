@@ -1,7 +1,6 @@
 *** Settings ***
 Library    AppiumLibrary
 Library    Collections
-Library    Math
 Resource   ../keywords/common_keywords.robot
 
 *** Keywords ***
