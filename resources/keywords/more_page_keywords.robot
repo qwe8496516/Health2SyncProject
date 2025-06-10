@@ -44,8 +44,12 @@ Click "Confirm" Button
     ${status}=    Run Keyword And Return Status    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1" and @text="Confirm"]
     Run Keyword If    not ${status}    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
 
-Verify Health Report Is Exported
+Verify Health Report Is Sent
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="android:id/message" and @text="Your data will be sent shortly."]
+
+Verify Health Report Is Not Sent
+    ${errorMsg} =    Get Error Message Text
+    Should Be Equal    ${errorMsg}    No email
 
 Click "Yes" Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1" and @text="Yes"]
@@ -118,13 +122,11 @@ Enter Weekly Exercise Time
 
 Verify Daily Steps Goal Is Changed
     [Arguments]    ${steps}
-    Click "Goals" Option
-    Scroll To Bottom Of Page
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value" and @text="${steps}"]
+    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[.//android.widget.TextView[@text="Daily Steps"]]/following-sibling::android.widget.TextView[@text="${steps}"]
 
 Verify Weekly Exercise Time Goal Is Changed
     [Arguments]    ${time}
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value" and @text="${time}"]
+    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[.//android.widget.TextView[@text="Weekly Exercise Time"]]/following-sibling::android.widget.TextView[@text="${time}"]
 
 Change Daily Steps And Weekly Exercise Time To Original Value
     Modify Daily Steps    7500
@@ -162,53 +164,17 @@ Click "Done" Button
     ${status}=    Run Keyword And Return Status    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right" and @text="Done"]
     Run Keyword If    not ${status}    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
 
-Increase Breakfast Routine By 1 Hour
-    Click "Breakfast" Option
-    Increase Time Slider By 1 Hour
-    Click "Done" Button
-
 Click "Breakfast" Option
     Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_breakfast"]/android.widget.LinearLayout
-
-Increase Lunch Routine By 1 Hour
-    Click "Lunch" Option
-    Increase Time Slider By 1 Hour
-    Click "Done" Button
 
 Click "Lunch" Option
     Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_lunch"]/android.widget.LinearLayout
 
-Increase Dinner Routine By 1 Hour
-    Click "Dinner" Option
-    Increase Time Slider By 1 Hour
-    Click "Done" Button
-
 Click "Dinner" Option
     Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_dinner"]/android.widget.LinearLayout
 
-Increase Bed Time Routine By 1 Hour
-    Click "Bed Time" Option
-    Increase Time Slider By 1 Hour
-    Click "Done" Button
-
 Click "Bed Time" Option
     Click Element Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_bed"]/android.widget.LinearLayout
-
-Increase Every Daily Routine By 1 Hour
-    Increase Wake Up Routine By 1 Hour
-    Increase Breakfast Routine By 1 Hour
-    Increase Lunch Routine By 1 Hour
-    Increase Dinner Routine By 1 Hour
-    Increase Bed Time Routine By 1 Hour
-    Click "Done" Button
-
-Verify Daily Routines Are Modified
-    Click "Daily Routine" Option
-    Wake Up Routine Should Be    08:00
-    Breakfast Routine Should Be    09:00
-    Lunch Routine Should Be    13:00
-    Dinner Routine Should Be    19:00
-    Bed Time Routine Should Be    23:00
 
 Wake Up Routine Should Be
     [Arguments]    ${time}
@@ -230,35 +196,172 @@ Bed Time Routine Should Be
     [Arguments]    ${time}
     Wait Until Element Is Visible    xpath=//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/view_routine_bed"]/android.widget.LinearLayout//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
 
-Decrease Wake Up Routine By 1 Hour
+### Copied from dashboard_information_keywords ###
+
+Click Before Meal Option
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_glucose_before_meal"]
+
+Click After Meal Option
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_glucose_after_meal"]
+
+Click Bedtime Option
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_glucose_bedtime"]
+
+Swipe Number Picker Lower Value
+    [Arguments]    ${value}
+    WHILE    ${True}
+        Sleep    0.1s
+        ${current_value} =    Get Text Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/design_bottom_sheet"]/android.view.ViewGroup/android.widget.NumberPicker[1]//android.widget.EditText[@resource-id="android:id/numberpicker_input"]
+        ${equal} =    Evaluate    "${current_value}" == "${value}"
+        Log    Current Value: ${current_value}
+        Log    Expected Value: ${value}
+        Log    Equal: ${equal}
+        IF    ${equal}
+            BREAK
+        ELSE IF   ${current_value} < ${value}
+            Swipe    435    1981    435    1832    500
+        ELSE
+            Swipe    435    1981    435    2131    500
+        END
+    END
+
+Swipe Number Picker Higher Value
+    [Arguments]    ${value}
+    WHILE    ${True}
+        ${current_value} =    Get Text Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="com.h2sync.android.h2syncapp:id/design_bottom_sheet"]/android.view.ViewGroup/android.widget.NumberPicker[2]//android.widget.EditText[@resource-id="android:id/numberpicker_input"]
+        ${equal} =    Evaluate    "${current_value}" == "${value}"
+        IF    ${equal}
+            BREAK
+        ELSE IF   ${current_value} < ${value}
+            Swipe    645    1981    645    1832    500
+        ELSE
+            Swipe    645    1981    645    2131    500
+        END
+    END
+
+Enter Before Meal Values
+    [Documentation]    Same as Dashboard Information Keyword
+    [Arguments]    ${lower_value}    ${higher_value}
+    Click Before Meal Option
+    Swipe Number Picker Lower Value    ${lower_value}
+    Swipe Number Picker Higher Value    ${higher_value}
+    Click "Done" Button
+
+Enter After Meal Values
+    [Arguments]    ${lower_value}    ${higher_value}
+    Click After Meal Option
+    Swipe Number Picker Lower Value    ${lower_value}
+    Swipe Number Picker Higher Value    ${higher_value}
+    Click "Done" Button
+
+Enter Bedtime Values
+    [Arguments]    ${lower_value}    ${higher_value}
+    Click Bedtime Option
+    Swipe Number Picker Lower Value    ${lower_value}
+    Swipe Number Picker Higher Value    ${higher_value}
+    Click "Done" Button
+
+Verify Before Meal Goal Is Changed
+    [Arguments]    ${lower_value}    ${higher_value}
+    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[.//android.widget.TextView[@text="Before Meal"]]/following-sibling::android.widget.TextView[@text="${lower_value} - ${higher_value}"]
+
+Verify After Meal Goal Is Changed
+    [Arguments]    ${lower_value}    ${higher_value}
+    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[.//android.widget.TextView[@text="After Meal"]]/following-sibling::android.widget.TextView[@text="${lower_value} - ${higher_value}"]
+
+Verify Bedtime Goal Is Changed
+    [Arguments]    ${lower_value}    ${higher_value}
+    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[.//android.widget.TextView[@text="Bedtime"]]/following-sibling::android.widget.TextView[@text="${lower_value} - ${higher_value}"]
+
+Get Error Message Text
+    ${value} =    Get Text Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="android:id/message"]
+    [Return]    ${value}
+
+Verify Warning Message High End Should Be Higher Than The Low End
+    ${errorMsg} =    Get Error Message Text
+    Should Be Equal    ${errorMsg}    The high end of the range should be higher than the low end.
+
+Click Dialog OK Button
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+
+#####################
+
+Page Title Should Be
+    [Arguments]    ${pageTitle}
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/toolbar"]//android.widget.TextView[@text="${pageTitle}"]
+
+Verify Favorite Food Is Not Created
+    Page Title Should Be    Create Favorite Food
+
+Click X Button
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/toolbar"]//android.widget.ImageButton
+
+Click Arrow Back Button
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/toolbar"]//android.widget.ImageButton
+
+Enter Wake Up Values
+    [Arguments]    ${hour}    ${minute}
     Click "Wake Up" Option
-    Decrease Time Slider By 1 Hour
+    Swipe Number Picker Lower Value    ${hour}
+    Swipe Number Picker Higher Value    ${minute}
     Click "Done" Button
 
-Decrease Breakfast Routine By 1 Hour
+Enter Breakfast Values
+    [Arguments]    ${hour}    ${minute}
     Click "Breakfast" Option
-    Decrease Time Slider By 1 Hour
+    Swipe Number Picker Lower Value    ${hour}
+    Swipe Number Picker Higher Value    ${minute}
     Click "Done" Button
 
-Decrease Lunch Routine By 1 Hour
+Enter Lunch Values
+    [Arguments]    ${hour}    ${minute}
     Click "Lunch" Option
-    Decrease Time Slider By 1 Hour
+    Swipe Number Picker Lower Value    ${hour}
+    Swipe Number Picker Higher Value    ${minute}
     Click "Done" Button
 
-Decrease Dinner Routine By 1 Hour
+Enter Dinner Values
+    [Arguments]    ${hour}    ${minute}
     Click "Dinner" Option
-    Decrease Time Slider By 1 Hour
+    Swipe Number Picker Lower Value    ${hour}
+    Swipe Number Picker Higher Value    ${minute}
     Click "Done" Button
 
-Decrease Bed Time Routine By 1 Hour
+Enter Bed Time Values In Routine
+    [Arguments]    ${hour}    ${minute}
     Click "Bed Time" Option
-    Decrease Time Slider By 1 Hour
+    Swipe Number Picker Lower Value    ${hour}
+    Swipe Number Picker Higher Value    ${minute}
     Click "Done" Button
 
-Decrease Every Daily Routine By 1 Hour
-    Decrease Wake Up Routine By 1 Hour
-    Decrease Breakfast Routine By 1 Hour
-    Decrease Lunch Routine By 1 Hour
-    Decrease Dinner Routine By 1 Hour
-    Decrease Bed Time Routine By 1 Hour
-    Click "Done" Button
+Verify Wake Up Daily Routine Is Changed
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_title" and @text="Wake Up"]/following-sibling::android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Verify Breakfast Daily Routine Is Changed
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_title" and @text="Breakfast"]/following-sibling::android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Verify Lunch Daily Routine Is Changed
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_title" and @text="Lunch"]/following-sibling::android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Verify Dinner Daily Routine Is Changed
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_title" and @text="Dinner"]/following-sibling::android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Verify Bed Time Daily Routine Is Changed
+    [Arguments]    ${time}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_title" and @text="Bed Time"]/following-sibling::android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_daily_routine_time" and @text="${time}"]
+
+Verify Warning Message Lunch Should Be Between Breakfast And Dinner
+    ${errorMsg} =    Get Error Message Text
+    Should Be Equal    ${errorMsg}    Lunch time should be between breakfast time and dinner time
+
+Verify Warning Message Dinner Should Be Between Lunch And Bedtime
+    ${errorMsg} =    Get Error Message Text
+    Should Be Equal    ${errorMsg}    Dinner time should be between lunch time and bedtime
+
+Click Dialog Close Button
+    [Documentation]    Same as Click Dialog OK Button
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
