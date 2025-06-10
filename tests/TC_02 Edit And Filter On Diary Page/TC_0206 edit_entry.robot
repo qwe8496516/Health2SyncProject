@@ -11,8 +11,8 @@ Edit Glucose Diary Entry
     Click Table View
     Verify Glucose Show On Table View  100  Lunch
     Click List View
-    Click Edit Glucose Diary Entry  50
-    Glucose Diary Entry Value Should Be  50
+    Edit Glucose Diary Entry  50
+    Verify Glucose Diary Is Correct  50
     [Teardown]    Delete Diary
 
 Edit Pressure Diary Entry

@@ -123,6 +123,17 @@ Verify Glucose Diary Is Not Present
     Click Diary To Diary Menu
     Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${bloodGlucose} mg/dL"]    5s
 
+Edit Glucose Diary Entry
+    [Arguments]    ${bloodGlucose}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"]
+    FOR    ${i}    IN RANGE    3
+        Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    END
+    Input Text Until Element Is Visible     xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${bloodGlucose}
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+
 
 
 
