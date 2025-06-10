@@ -6,9 +6,6 @@ Resource   ../keywords/common_keywords.robot
 Click Diary Menu
     Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_diaries"]
 
-Click Dashboard Menu
-    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/tab_dashboard"]
-
 Click Table View
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/display_type" and @text="Table View"]
 
