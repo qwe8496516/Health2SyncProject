@@ -15,6 +15,7 @@ ${EXERCISE_DASHBOARD}    exercise
 ${STEPS_DASHBOARD}    steps
 ${GLUCOSE_DASHBOARD}    glucose
 ${PRESSURE_DASHBOARD}    pressure
+${DIET_DASHBOARD}    diet
 
 # Glucose Diary
 &{GLUCOSE_DIARY}    glucose=100    time=now    period=After Snack
@@ -61,3 +62,6 @@ ${EXERCISE_STEPS_MAX}    99999
 ${EXERCISE_STEPS_NORMAL}    10000
 ${EXERCISE_STEPS_EXCEED_LIMIT}    100000
 ${EXERCISE_STEPS_EXCEED_LIMIT_RESULT}    10000
+
+# Add Daily Diet Entry
+&{foodIndex}    Bread=1    Meat=2    Pasta=3    Fish=4    Rice=5    Seafood=6    StarchyVeggies=7    Eggs=8    OtherGrains=9    OtherProteins=10    Vegetables=11    Fruits=12    Dairy=13    Oils=14    Juice=15    Alcohol=16    SoftDrinks=17    Coffe/Tea=18

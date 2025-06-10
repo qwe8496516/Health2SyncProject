@@ -362,3 +362,63 @@ Verify Pressure Pulse Values Is Correct
 Verify Warning Message High End Should Be Higher Than The Low End
     ${errorMsg} =    Get Error Message Text
     Should Be Equal    ${errorMsg}    The high end of the range should be higher than the low end.
+
+Click Diet Dashboard
+    ${dietPath} =    Set Variable    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diet"]
+    Scroll Until Dashboard Section Is Visible    ${dietPath}
+    Click Element Until Element Is Visible    ${dietPath}
+
+Change Daily Diet Target
+    [Arguments]    ${calories}
+    Click Dashboard Item Setting Button
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_diet_calories"]/android.view.ViewGroup
+    FOR    ${index}    IN RANGE    4
+        Click Element Until Element Is Visible  xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    END
+    Input Text Until Element Is Visible  xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_calories"]    ${Calories}
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_one"]
+
+Verify Diet Target Is Modified
+    ${carbs} =    Get Text Until Element Is Visible  xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_carbs"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_nutrition_gram"]
+    ${protein} =    Get Text Until Element Is Visible  xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_protein"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_nutrition_gram"]
+    ${fat} =    Get Text Until Element Is Visible  xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_fat"]//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_nutrition_gram"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_complete"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
+    ${dashboardCarbs} =    Get Text Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_progress_goal_carbs"]
+    ${dashboardProtein} =    Get Text Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_progress_goal_proteins"]
+    ${dashboardFat} =    Get Text Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_progress_goal_fats"]
+    Should Be Equal    ${dashboardCarbs}    /${carbs}
+    Should Be Equal    ${dashboardProtein}    /${protein}
+    Should Be Equal    ${dashboardFat}    /${fat}
+
+Reset Daily Diet Target
+    Click Dashboard Item Setting Button
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/view_diet_calories"]/android.view.ViewGroup
+    FOR    ${index}    IN RANGE    4
+        Click Element Until Element Is Visible  xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    END
+    Input Text Until Element Is Visible  xpath=//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_calories"]    2500
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_one"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_complete"]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_confirm"]
+
+Add Daily Diet Entry
+    [Arguments]    ${meal}    ${index}
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_meal_type" and @text="${meal}"]
+    Click Element Until Element Is Visible  xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_add_by_category"]
+    Click Element Until Element Is Visible  xpath=(//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_add"])[${index}]
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+    Sleep    2s
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_bottom"]
+    Sleep    2s
+    Click Element Until Element Is Visible  xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+
+Verify Daily Diet Entry Is Added
+    [Arguments]    ${food}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_food_name"]
+    ${foodName} =    Get Text Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_food_name"]    timeout=5s
+    Should Be Equal    ${foodName}    ${food}
+    Click Element Until Element Is Visible  xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/toolbar"]//android.widget.ImageButton
+    Wait Until Element Is Visible    xpath=(//android.widget.TextView[@text="Dashboard"])[1]

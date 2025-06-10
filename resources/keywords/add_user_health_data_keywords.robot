@@ -67,7 +67,7 @@ Choose Period
 
 Click Done Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
-     ${is_alert_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button2"]
+    ${is_alert_visible}=    Run Keyword And Return Status   Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button2"]
     Run Keyword If    '${is_alert_visible}' == 'True'    Click Element Until Element Is Visible     xpath=//android.widget.Button[@resource-id="android:id/button2"]
 
 Delete Diary
@@ -77,6 +77,7 @@ Delete Diary
     Run Keyword If    '${is_image_visible}' == 'True'    Click Element Until Element Is Visible    xpath=//android.widget.ImageView[@resource-id="com.h2sync.android.h2syncapp:id/image_go_to_bottom"]
     Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_diary_delete"]
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="You don’t have any diaries yet."]    timeout=10s
 
 Click Cancel Button
     Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
@@ -122,8 +123,28 @@ Verify Glucose Diary Is Not Present
     Click Diary To Diary Menu
     Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${bloodGlucose} mg/dL"]    5s
 
+Edit Glucose Diary Entry
+    [Arguments]    ${bloodGlucose}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"]
+    FOR    ${i}    IN RANGE    3
+        Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    END
+    Input Text Until Element Is Visible     xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${bloodGlucose}
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
 
-
+Cancel Edit Glucose Diary
+    [Arguments]    ${bloodGlucose}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"]
+    FOR    ${i}    IN RANGE    3
+        Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    END
+    Input Text Until Element Is Visible     xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${bloodGlucose}
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
 
 ######################################################################  Pressure   ###################################################################### 
 Create Pressure Diary
@@ -156,7 +177,36 @@ Verify Pressure Diary Is Not Present
     ${expected_value}=    Set Variable    ${systolic}/${diastolic} mmHg ${pulse} bpm
     Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_value}"]    5s
 
+Edit Pressure Diary
+    [Arguments]    ${systolic}    ${diastolic}    ${pulse}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[1]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${systolic}
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[2]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${diastolic}
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[3]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[3]    ${pulse}
+    Click element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Done Button
 
+Cancel Edit Pressure Diary
+    [Arguments]    ${systolic}    ${diastolic}    ${pulse}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]    ${systolic}
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[2]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]    ${diastolic}
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[3]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[3]    ${pulse}
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
 
 
 ######################################################################  Weight   ###################################################################### 
@@ -189,7 +239,30 @@ Verify Weight Diary Is Not Present
     ${expected_value}=    Set Variable    ${weight} kg ${body_body_fat} %
     Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_item_value" and @text="${expected_value}"]    5s
 
+Edit Weight Diary
+    [Arguments]    ${weight}    ${body_fat}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[1]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]   ${weight}
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[2]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]   ${body_fat}
+    Click element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Done Button
 
+Cancel Edit Weight Diary
+    [Arguments]    ${weight}    ${body_fat}
+    Click Element Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="com.h2sync.android.h2syncapp:id/layout_title_section"]
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[1]   ${weight}
+    Click Element Until Element Is Visible    xpath=(//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_value_unit"])[2]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible    xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_value"])[2]   ${body_fat}
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_cancel"]
+    Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]
 
 
 ######################################################################  Medication   ###################################################################### 
@@ -353,6 +426,18 @@ Verify Oral Medication Diary Is Not Present
     Run Keyword If    '${tablets}' != ''    Set Test Variable    ${expected_medication_text}    ${medication_content} - ${tablets} ${tablet_text}
     Sleep   3s
     Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_medication_text}"]
+
+Edit Medication Diary
+    [Arguments]    ${carbs}    ${units}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_unit" and @text="gram"]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[1]    ${carbs}
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_unit" and @text="unit"]
+    Click Element Until Element Is Visible    xpath=//android.widget.ImageButton[@resource-id="com.h2sync.android.h2syncapp:id/button_delete"]
+    Input Text Until Element Is Visible      xpath=(//android.widget.EditText[@resource-id="com.h2sync.android.h2syncapp:id/edit_serving"])[2]   ${units}
+    Click element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_action"]
+    Click Done Button
 
 
 
@@ -574,6 +659,29 @@ Verify Diet Diary Is Not Present
 
     END
 
+Edit Diet Diary
+    [Arguments]    ${entries}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=//androidx.recyclerview.widget.RecyclerView[@resource-id="com.h2sync.android.h2syncapp:id/recycler_view_diary_food"]/android.view.ViewGroup
+    
+    FOR    ${entry}    IN    @{entries}
+        ${serv}=        Get From Dictionary    ${entry}    serv
+
+        ${serv_float}=    Evaluate    float(${serv})
+        Run Keyword If    not ${0.0} <= ${serv_float} <= ${19.9}    Fail    Serv value must be between 0.0 and 19.9
+
+        ${integer_part}=    Evaluate    int(${serv_float})
+        ${decimal_part}=    Evaluate    int(round((${serv_float} - ${integer_part}) * 10))
+
+        Log To Console      target: ${integer_part}.${decimal_part}
+
+        Swipe To Set Diet Serving Value    1    ${integer_part}
+        Swipe To Set Diet Serving Value    2    ${decimal_part}
+
+        Click Element    //android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+    END
+    Click element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
+
 
 
 
@@ -733,6 +841,25 @@ Verify Exercise Diary Is Not Present
         Run Keyword And Expect Error    *    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="${expected_text}"]    5s
         Log    Verified exercise entry is not present: ${expected_text}
 
+    END
+
+Edit Exercise Diary
+    [Arguments]    ${entries}
+    Click Element Until Element Is Visible    xpath=(//android.widget.LinearLayout[@resource-id="com.h2sync.android.h2syncapp:id/layout_content"])[1]/android.view.ViewGroup/android.view.ViewGroup
+    Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/text_exercise_duration"]
+    
+    FOR    ${entry}    IN    @{entries}
+        ${hour}=    Get From Dictionary    ${entry}    hour
+        ${minute}=  Get From Dictionary    ${entry}    minute
+
+        # 檢查時間是否合法
+        Validate Exercise Time    ${hour}    ${minute}
+
+        Swipe To Set Exercise Time    1    ${hour}
+        Swipe To Set Exercise Time    2    ${minute}
+
+        Click Element Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="com.h2sync.android.h2syncapp:id/button_right"]
+        Click Element Until Element Is Visible    xpath=//android.widget.Button[@resource-id="com.h2sync.android.h2syncapp:id/button_done"]
     END
 
 
